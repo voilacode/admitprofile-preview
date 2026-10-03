@@ -15,31 +15,85 @@ body{margin:0;background:#F6F4FF;color:#16123A;font-family:'DM Sans',system-ui,s
 a{color:#5B3DF5}a:hover{color:#E8336D}
 *{box-sizing:border-box}
 @keyframes apdot{0%,80%,100%{opacity:.25}40%{opacity:1}}
+
+@media (max-width: 760px) {
+  /* Shell: the sidebar becomes a bottom tab bar */
+  .m-root { flex-direction: column !important; }
+  .m-side { position: fixed !important; left: 0 !important; right: 0 !important; bottom: 0 !important; top: auto !important; height: auto !important; width: auto !important; flex: none !important; z-index: 40 !important; flex-direction: row !important; align-items: center !important; gap: 2px !important; padding: 6px 6px calc(6px + env(safe-area-inset-bottom)) !important; border-right: 0 !important; border-top: 1px solid #E7E3F5 !important; background: rgba(255,255,255,.97) !important; backdrop-filter: blur(10px); }
+  .m-hide { display: none !important; }
+  .m-nav { flex-direction: row !important; gap: 0 !important; flex: 5 1 0 !important; min-width: 0 !important; }
+  .m-nav::-webkit-scrollbar { display: none; }
+  .m-tab { flex: 1 1 0 !important; min-width: 0 !important; flex-direction: column !important; justify-content: center !important; gap: 3px !important; padding: 6px 1px !important; border: 0 !important; border-radius: 12px !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: -.01em; }
+  .m-tab > svg, .m-tab > span:first-child { width: 20px !important; height: 20px !important; flex: 0 0 20px !important; }
+  .m-tab > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* Short labels: the desktop ones ("Ask the assistant", "Talk to a counsellor") do not fit */
+  .m-tab > span:last-child { font-size: 0 !important; }
+  .m-tab > span:last-child::after { font-size: 9.5px; }
+  .m-ask > span:last-child::after { content: 'Ask'; }
+  .m-nav > .m-tab:nth-of-type(1) > span:last-child::after { content: 'Profile'; }
+  .m-nav > .m-tab:nth-of-type(2) > span:last-child::after { content: 'Careers'; }
+  .m-nav > .m-tab:nth-of-type(3) > span:last-child::after { content: 'Milestones'; }
+  .m-nav > .m-tab:nth-of-type(4) > span:last-child::after { content: 'Counsellor'; }
+  .m-nav > .m-tab:nth-of-type(5) > span:last-child::after { content: 'Admin'; }
+  .m-foot { margin: 0 !important; flex: 0 0 auto !important; }
+  .m-prof { width: auto !important; padding: 6px !important; }
+  .m-prof > :not(:first-child) { display: none !important; }
+  .m-profmenu { left: auto !important; right: 0 !important; }
+  .m-main { min-height: 100vh; padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
+
+  /* Sign-in: stack the two halves, drop the decorative cards */
+  .m-login { flex-direction: column !important; flex-wrap: nowrap !important; }
+  .m-login-hero { flex: none !important; min-height: 0 !important; padding: 28px 20px 26px !important; gap: 22px !important; }
+  .m-login-h1 { font-size: 38px !important; }
+  .m-login-art { display: none !important; }
+  .m-login-form { flex: none !important; min-height: 0 !important; padding: 28px 20px 40px !important; justify-content: flex-start !important; }
+
+  /* Two-panel screens stack; side sheets go full screen */
+  .m-split { flex-direction: column !important; align-items: stretch !important; }
+  .m-chat { position: relative !important; flex: none !important; width: 100% !important; height: calc(100dvh - 72px - env(safe-area-inset-bottom)) !important; }
+  .m-sheet { position: fixed !important; inset: 0 0 calc(64px + env(safe-area-inset-bottom)) 0 !important; flex: none !important; width: auto !important; height: auto !important; z-index: 35 !important; padding: 16px 14px !important; border-left: 0 !important; }
+  .m-panel { position: static !important; flex: none !important; width: 100% !important; height: auto !important; overflow: visible !important; border-right: 0 !important; border-bottom: 1px solid #E7E3F5 !important; }
+  .m-canvas { flex: none !important; width: 100% !important; height: 72vh !important; }
+  .m-goals { flex: none !important; width: 100% !important; height: auto !important; overflow: visible !important; }
+  .m-goals-in { position: static !important; padding: 18px 14px 28px !important; }
+
+  /* Pages */
+  .m-page { padding: 18px 14px 32px !important; gap: 16px !important; }
+  .m-stack { flex-wrap: wrap !important; }
+  .m-stack > * { flex: 1 1 100% !important; min-width: 0 !important; max-width: 100% !important; }
+  .m-pad { padding: 26px 20px !important; }
+  .m-overlay { inset: 0 !important; z-index: 50 !important; }
+  .m-fit { min-width: 0 !important; max-width: 100% !important; }
+  .m-pills { max-width: 100% !important; overflow-x: auto; scrollbar-width: none; }
+  .m-pills::-webkit-scrollbar { display: none; }
+  .m-pills > * { flex: 0 0 auto !important; }
+  .m-shrink > * { min-width: 0 !important; max-width: 100% !important; }
+}
 </style>
 </helmet>
-<div style="min-height:100vh;display:flex;flex-direction:row">
-  <aside style="flex:0 0 {{ sbW }};width:{{ sbW }};transition:width .18s ease,flex-basis .18s ease;height:100vh;position:sticky;top:0;z-index:5;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;padding:14px 12px 12px;background:#F6F4FF;border-right:1px solid #E7E3F5">
-    <button onClick="{{ toggleSb }}" title="{{ sbToggleLabel }}" style="all:unset;cursor:pointer;position:absolute;top:50%;right:-13px;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:1px solid #E7E3F5;box-shadow:0 2px 6px rgba(22,18,58,.10);display:flex;align-items:center;justify-content:center;z-index:6" style-hover="background:#E6E1FF;border-color:#D4CCFF">
+<div class="m-root" style="min-height:100vh;display:flex;flex-direction:row">
+  <aside class="m-side" style="flex:0 0 {{ sbW }};width:{{ sbW }};transition:width .18s ease,flex-basis .18s ease;height:100vh;position:sticky;top:0;z-index:5;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;padding:14px 12px 12px;background:#F6F4FF;border-right:1px solid #E7E3F5">
+    <button onClick="{{ toggleSb }}" title="{{ sbToggleLabel }}" class="m-hide" style="all:unset;cursor:pointer;position:absolute;top:50%;right:-13px;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:#FFFFFF;border:1px solid #E7E3F5;box-shadow:0 2px 6px rgba(22,18,58,.10);display:flex;align-items:center;justify-content:center;z-index:6" style-hover="background:#E6E1FF;border-color:#D4CCFF">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4A4666" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate({{ sbRot }});transition:transform .18s ease"><path d="m15 18-6-6 6-6"></path></svg>
     </button>
-    <div style="display:flex;align-items:center;gap:10px;white-space:nowrap;padding:4px {{ sbPad }};justify-content:{{ sbJust }}">
+    <div class="m-hide" style="display:flex;align-items:center;gap:10px;white-space:nowrap;padding:4px {{ sbPad }};justify-content:{{ sbJust }}">
       <span style="width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:#0F4C5C;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:13px;letter-spacing:.02em">AN</span>
       <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}"><span style="flex:1;display:flex;flex-direction:column;line-height:1.15;min-width:0;overflow:hidden"><span style="font-family:'Bricolage Grotesque',sans-serif;font-size:16px;font-weight:700;letter-spacing:-.01em;color:#16123A;overflow:hidden;text-overflow:ellipsis">Al Noor Education</span><span style="font-size:11px;color:#6E6A8A">College planning · Doha</span></span></sc-if>
     </div>
-    <button onClick="{{ newChat }}" title="Ask the assistant" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:{{ sbJust }};gap:10px;padding:10px 12px;border-radius:12px;background:{{ askBg }};border:1px solid {{ askBorder }};color:{{ askColor }};font-size:14px;font-weight:700">
+    <button onClick="{{ newChat }}" title="Ask the assistant" class="m-tab m-ask" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:{{ sbJust }};gap:10px;padding:10px 12px;border-radius:12px;background:{{ askBg }};border:1px solid {{ askBorder }};color:{{ askColor }};font-size:14px;font-weight:700">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.38 3.62a1 1 0 0 1 3 3L7.37 18.64a2 2 0 0 1-.86.5l-2.87.84a.5.5 0 0 1-.62-.62l.84-2.87a2 2 0 0 1 .5-.86z"></path></svg>
       <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}"><span style="white-space:nowrap">Ask the assistant</span></sc-if>
     </button>
-    <nav style="display:flex;flex-direction:column;gap:2px">
+    <nav class="m-nav" style="display:flex;flex-direction:column;gap:2px">
       <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
-        <button onClick="{{ t.go }}" title="{{ t.label }}" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:{{ sbJust }};gap:11px;padding:9px 12px;border-radius:12px;font-size:14px;font-weight:{{ t.weight }};background:{{ t.bg }};color:{{ t.color }}">
+        <button onClick="{{ t.go }}" title="{{ t.label }}" class="m-tab" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:{{ sbJust }};gap:11px;padding:9px 12px;border-radius:12px;font-size:14px;font-weight:{{ t.weight }};background:{{ t.bg }};color:{{ t.color }}">
           <span style="width:17px;height:17px;flex:0 0 17px;background:{{ t.ic }};-webkit-mask:{{ t.mask }};mask:{{ t.mask }}"></span>
           <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}"><span style="white-space:nowrap">{{ t.label }}</span></sc-if>
         </button>
       </sc-for>
     </nav>
-    <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
-      <button onClick="{{ goBilling }}" title="Plan and sessions" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;flex-direction:column;gap:8px;padding:{{ pcPad }};border-radius:14px;background:{{ pc.bg }};border:1px solid {{ pc.border }}">
+    <div class="m-foot" style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+      <button onClick="{{ goBilling }}" title="Plan and sessions" class="m-hide" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;flex-direction:column;gap:8px;padding:{{ pcPad }};border-radius:14px;background:{{ pc.bg }};border:1px solid {{ pc.border }}">
         <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
             <span style="display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B3DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z"></path><path d="M11 3 8 9l4 13 4-13-3-6"></path><path d="M2 9h20"></path></svg>{{ pc.name }}</span>
@@ -55,7 +109,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </sc-if>
       </button>
       <div style="position:relative">
-        <button onClick="{{ toggleProf }}" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:{{ sbJust }};gap:10px;padding:8px;border-radius:14px;background:{{ profBtnBg }}">
+        <button onClick="{{ toggleProf }}" class="m-prof" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:{{ sbJust }};gap:10px;padding:8px;border-radius:14px;background:{{ profBtnBg }}">
           <span style="position:relative;width:32px;height:32px;flex:0 0 32px">
             <span style="position:absolute;inset:0;border-radius:50%;background:{{ pf.bgImg }}"></span>
             <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ false }}">
@@ -67,7 +121,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </button>
         <sc-if value="{{ profOpen }}" hint-placeholder-val="{{ false }}">
           <div onClick="{{ toggleProf }}" style="position:fixed;inset:0;z-index:30"></div>
-          <div style="position:absolute;bottom:calc(100% + 8px);left:0;width:224px;z-index:31;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:18px;box-shadow:0 16px 36px rgba(22,18,58,.16);padding:8px;display:flex;flex-direction:column;gap:2px">
+          <div class="m-profmenu" style="position:absolute;bottom:calc(100% + 8px);left:0;width:224px;z-index:31;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:18px;box-shadow:0 16px 36px rgba(22,18,58,.16);padding:8px;display:flex;flex-direction:column;gap:2px">
             <div style="display:flex;align-items:center;gap:10px;padding:8px 10px 12px;border-bottom:1px solid #F0EDF9;margin-bottom:4px">
               <span style="width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:{{ pf.bgImg }}"></span>
               <span style="display:flex;flex-direction:column;font-size:13px;line-height:1.3"><span style="font-weight:700">Omar</span><span style="color:#6E6A8A;font-size:12px">Parent account · Sara</span></span>
@@ -87,16 +141,16 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </sc-if>
       </div>
     </div>
-    <div title="Powered by AdmitProfile" style="display:flex;align-items:center;justify-content:{{ sbJust }};gap:6px;padding:10px 8px 0;border-top:1px solid #E7E3F5;font-size:11px;color:#6E6A8A;white-space:nowrap">
+    <div title="Powered by AdmitProfile" class="m-hide" style="display:flex;align-items:center;justify-content:{{ sbJust }};gap:6px;padding:10px 8px 0;border-top:1px solid #E7E3F5;font-size:11px;color:#6E6A8A;white-space:nowrap">
     <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}"><span>Powered by</span></sc-if>
     <svg width="14" height="14" viewBox="0 0 32 32" style="display:block"><rect width="32" height="32" rx="10" fill="#5B3DF5"></rect><path d="M8 24 C 12 24, 12 15, 17 15 S 21 9, 23.5 8.5" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"></path><circle cx="8" cy="24" r="2.4" fill="#FFFFFF"></circle><circle cx="24" cy="8.5" r="3.6" fill="#FFC53D"></circle></svg>
     <sc-if value="{{ sbOpen }}" hint-placeholder-val="{{ true }}"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:12px;letter-spacing:-.02em;color:#16123A">admit<span style="color:#5B3DF5">profile</span></span></sc-if>
   </div>
   </aside>
-  <main style="flex:1 1 0;min-width:0;display:flex;flex-direction:column">
+  <main class="m-main" style="flex:1 1 0;min-width:0;display:flex;flex-direction:column">
   <sc-if value="{{ loggedOut }}" hint-placeholder-val="{{ false }}">
-    <div style="position:fixed;inset:0;z-index:60;background:#F6F4FF;overflow-y:auto;display:flex;flex-wrap:wrap">
-      <div style="flex:1 1 400px;min-height:100vh;position:relative;overflow:hidden;background:#16123A;color:#FFFFFF;padding:48px 56px;box-sizing:border-box;display:flex;flex-direction:column;gap:40px">
+    <div class="m-login" style="position:fixed;inset:0;z-index:60;background:#F6F4FF;overflow-y:auto;display:flex;flex-wrap:wrap">
+      <div class="m-login-hero" style="flex:1 1 400px;min-height:100vh;position:relative;overflow:hidden;background:#16123A;color:#FFFFFF;padding:48px 56px;box-sizing:border-box;display:flex;flex-direction:column;gap:40px">
         <div style="position:absolute;right:-220px;top:-260px;width:760px;height:760px;border-radius:50%;background:radial-gradient(circle,rgba(91,61,245,.6) 0%,rgba(91,61,245,0) 65%)"></div>
         <div style="position:absolute;left:-200px;bottom:-280px;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(255,158,187,.35) 0%,rgba(255,158,187,0) 65%)"></div>
         <div style="position:relative;display:flex;align-items:center;gap:12px">
@@ -105,10 +159,10 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </div>
         <div style="position:relative;display:flex;flex-direction:column;gap:18px;max-width:560px">
           <span style="align-self:flex-start;background:#FFC53D;color:#16123A;border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap">Grade 8 to 12 planning</span>
-          <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;line-height:1.02;letter-spacing:-.035em;text-wrap:balance">Plan the next four years, one milestone at a time.</h1>
+          <h1 class="m-login-h1" style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:56px;line-height:1.02;letter-spacing:-.035em;text-wrap:balance">Plan the next four years, one milestone at a time.</h1>
           <p style="margin:0;font-size:17px;line-height:1.55;color:#D4CCFF;max-width:460px">See who your child is becoming, explore careers that fit, and always know what to do next.</p>
         </div>
-        <div style="position:relative;flex:1;min-height:340px">
+        <div class="m-login-art" style="position:relative;flex:1;min-height:340px">
           <div style="position:absolute;left:0;top:10px;width:300px;background:#FFFFFF;color:#16123A;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 24px 48px rgba(0,0,0,.25);transform:rotate(-3deg)">
             <div style="display:flex;align-items:center;gap:12px">
               <span style="width:52px;height:52px;border-radius:50%;background:#FFC53D;overflow:hidden;display:block;flex:0 0 52px"><img src="assets/omar.svg" alt="" style="width:100%;height:100%;display:block"></span>
@@ -134,7 +188,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
           <span style="position:absolute;left:470px;top:84px;background:#7BE0B5;color:#16123A;border-radius:999px;padding:8px 14px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;transform:rotate(-5deg)">Design?</span>
         </div>
       </div>
-      <div style="flex:1 1 400px;min-height:100vh;box-sizing:border-box;padding:48px 40px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:28px">
+      <div class="m-login-form" style="flex:1 1 400px;min-height:100vh;box-sizing:border-box;padding:48px 40px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:28px">
         <a href="./" style="width:100%;max-width:400px;display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:#5B3DF5;text-decoration:none">← Back to home</a>
         <form onSubmit="{{ doLogin }}" style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:22px">
           <div style="display:flex;flex-direction:column;gap:8px">
@@ -153,8 +207,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isExplore }}" hint-placeholder-val="{{ true }}">
-    <div style="display:flex;flex-wrap:nowrap;align-items:flex-start">
-      <section style="flex:1 1 0;min-width:0;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;background:#FFFFFF">
+    <div class="m-split" style="display:flex;flex-wrap:nowrap;align-items:flex-start">
+      <section class="m-chat" style="flex:1 1 0;min-width:0;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;background:#FFFFFF">
         <div ref="{{ chatRef }}" style="flex:1;overflow:auto">
           <div style="max-width:760px;margin:0 auto;padding:32px 24px 24px;display:flex;flex-direction:column;gap:26px">
             <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="3">
@@ -216,7 +270,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
       </section>
 
       <sc-if value="{{ drawerOpenA }}" hint-placeholder-val="{{ false }}">
-        <section style="flex:0 0 min(560px,50%);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#F6F4FF;border-left:1px solid #E7E3F5;padding:18px 22px 48px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
+        <section class="m-sheet" style="flex:0 0 min(560px,50%);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#F6F4FF;border-left:1px solid #E7E3F5;padding:18px 22px 48px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box">
           <div style="display:flex;flex-direction:column-reverse;align-items:stretch;gap:10px">
             <div style="display:flex;flex-wrap:wrap;gap:4px;padding:4px;border:1px solid #D5CFEE;border-radius:18px;background:#FFFFFF;min-width:0">
               <sc-for list="{{ aViews }}" as="v" hint-placeholder-count="5">
@@ -338,8 +392,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isUnis }}" hint-placeholder-val="{{ false }}">
-    <div style="display:flex;flex-wrap:nowrap;align-items:flex-start">
-      <aside style="flex:0 0 clamp(280px,28vw,380px);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#FFFFFF;border-right:1px solid #E7E3F5;padding:20px;display:flex;flex-direction:column;gap:20px">
+    <div class="m-split" style="display:flex;flex-wrap:nowrap;align-items:flex-start">
+      <aside class="m-panel" style="flex:0 0 clamp(280px,28vw,380px);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#FFFFFF;border-right:1px solid #E7E3F5;padding:20px;display:flex;flex-direction:column;gap:20px">
         <section style="border-radius:22px;padding:18px;background:{{ hero.tint }};display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;gap:14px;align-items:center">
             <div role="img" aria-label="{{ hero.name }}" style="width:72px;height:72px;flex:0 0 72px;border-radius:50%;background:{{ hero.bgImg }};border:3px solid #FFFFFF"></div>
@@ -389,7 +443,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </section>
       </aside>
 
-      <section style="flex:1 1 0;min-width:0;height:100vh;position:relative;overflow:hidden;background:#FAF9FF radial-gradient(circle, #DDD8F3 1px, transparent 1.2px) 0 0/18px 18px">
+      <section class="m-canvas" style="flex:1 1 0;min-width:0;height:100vh;position:relative;overflow:hidden;background:#FAF9FF radial-gradient(circle, #DDD8F3 1px, transparent 1.2px) 0 0/18px 18px">
         <div style="position:absolute;inset:0;overflow:auto">
           <div style="position:relative;width:1180px;height:620px">
             <sc-for list="{{ g.cols }}" as="c" hint-placeholder-count="5">
@@ -493,7 +547,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isNudges }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:22px;max-width:1320px">
+    <div class="m-page" style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:22px;max-width:1320px">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
         <div style="display:flex;flex-direction:column;gap:6px">
           <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:34px">Settings</h1>
@@ -527,7 +581,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
       </sc-if>
 
       <sc-if value="{{ nIsSettings }}" hint-placeholder-val="{{ true }}">
-        <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:nowrap">
+        <div class="m-stack" style="display:flex;gap:24px;align-items:flex-start;flex-wrap:nowrap">
           <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px">
             <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:20px;padding:20px 22px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px">
               <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:12px;font-weight:600;color:#6E6A8A">Preferred time</span><div style="display:flex;flex-wrap:wrap;border:1px solid #D5CFEE;border-radius:8px;overflow:hidden;background:#FFFFFF">
@@ -638,7 +692,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isProfiler }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:18px;max-width:1240px;margin:0 auto;width:100%;box-sizing:border-box">
+    <div class="m-page" style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:18px;max-width:1240px;margin:0 auto;width:100%;box-sizing:border-box">
       <sc-if value="{{ pfAssessOpen }}" hint-placeholder-val="{{ true }}">
         <section style="border-radius:24px;padding:18px 20px;background:#FFFFFF;border:2px solid {{ pfAssessBorder }};display:flex;gap:18px;align-items:center;flex-wrap:wrap;box-shadow:{{ pfAssessShadow }}">
           <div style="width:52px;height:52px;flex:0 0 52px;border-radius:16px;background:{{ pfAssessIconBg }};display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;background:#FFFFFF;-webkit-mask:{{ pfAssessIcon }};mask:{{ pfAssessIcon }}"></span></div>
@@ -841,7 +895,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isBilling }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:32px 40px 64px;display:flex;flex-direction:column;gap:22px;max-width:1000px;margin:0 auto;width:100%;box-sizing:border-box">
+    <div class="m-page" style="padding:32px 40px 64px;display:flex;flex-direction:column;gap:22px;max-width:1000px;margin:0 auto;width:100%;box-sizing:border-box">
       <div style="display:flex;flex-direction:column;gap:4px">
         <span style="font-size:11px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Plan and sessions · Al Noor Education</span>
         <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:32px;line-height:1.1">Your plan</h1>
@@ -889,8 +943,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isCounsel }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:40px 40px 64px;display:flex;flex-direction:column;gap:36px;max-width:1040px;margin:0 auto;width:100%;box-sizing:border-box">
-      <section style="border-radius:32px;background:#0F4C5C;color:#FFFFFF;padding:40px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;overflow:hidden">
+    <div class="m-page" style="padding:40px 40px 64px;display:flex;flex-direction:column;gap:36px;max-width:1040px;margin:0 auto;width:100%;box-sizing:border-box">
+      <section class="m-pad" style="border-radius:32px;background:#0F4C5C;color:#FFFFFF;padding:40px;display:flex;gap:32px;align-items:center;flex-wrap:wrap;overflow:hidden">
         <div style="flex:1 1 380px;min-width:0;display:flex;flex-direction:column;gap:18px">
           <span style="font-size:11px;font-weight:700;color:#9FD3DC;letter-spacing:.06em;text-transform:uppercase">Al Noor counsellors</span>
           <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:40px;line-height:1.08;text-wrap:balance">Turn Omar’s plan into clear next steps, in one 30-minute call</h1>
@@ -951,11 +1005,11 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
-    <div style="padding:26px 32px 72px;display:flex;flex-direction:column;gap:20px;max-width:1200px;margin:0 auto;width:100%;box-sizing:border-box">
+    <div class="m-page" style="padding:26px 32px 72px;display:flex;flex-direction:column;gap:20px;max-width:1200px;margin:0 auto;width:100%;box-sizing:border-box">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+        <div class="m-fit" style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
           <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:28px;line-height:1.1">Admin</h1>
-          <div style="display:flex;gap:4px;padding:4px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E3F5">
+          <div class="m-pills" style="display:flex;gap:4px;padding:4px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E3F5">
             <sc-for list="{{ admTabs }}" as="t" hint-placeholder-count="4">
               <button onClick="{{ t.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:{{ t.bg }};color:{{ t.color }}">{{ t.label }} <span style="opacity:.6">{{ t.n }}</span></button>
             </sc-for>
@@ -1094,8 +1148,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
       </sc-if>
 
       <sc-if value="{{ admIsPlans }}" hint-placeholder-val="{{ false }}">
-        <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:18px 20px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
-          <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Usage meter</span><div style="display:flex;gap:4px;padding:3px;border-radius:999px;background:#F6F4FF;border:1px solid #E7E3F5;align-self:flex-start;flex-wrap:nowrap;flex:0 0 auto;width:max-content;max-width:100%"><sc-for list="{{ admMeterOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button></sc-for></div><span style="font-size:12px;color:#6E6A8A">What parents see counted on their plan card</span></div>
+        <section class="m-shrink" style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:18px 20px;display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:11px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Usage meter</span><div class="m-pills" style="display:flex;gap:4px;padding:3px;border-radius:999px;background:#F6F4FF;border:1px solid #E7E3F5;align-self:flex-start;flex-wrap:nowrap;flex:0 0 auto;width:max-content;max-width:100%"><sc-for list="{{ admMeterOpts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button></sc-for></div><span style="font-size:12px;color:#6E6A8A">What parents see counted on their plan card</span></div>
           <button onClick="{{ goBilling }}" style="all:unset;cursor:pointer;margin-left:auto;align-self:center;white-space:nowrap;font-size:13px;font-weight:700;padding:9px 16px;border-radius:999px;border:1.5px solid #5B3DF5;color:#5B3DF5">Preview as parent →</button>
         </section>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px">
@@ -1105,7 +1159,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
               <input value="{{ p.name }}" onChange="{{ p.onName }}" style="border:1px solid #E7E3F5;border-radius:12px;padding:9px 12px;font:inherit;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:18px;outline:none;color:#16123A;background:#FAF9FF">
               <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
                 <span style="display:flex;align-items:center;gap:6px;border:1px solid #E7E3F5;border-radius:12px;padding:6px 10px;background:#FAF9FF"><span style="font-size:12px;color:#6E6A8A">QAR</span><input type="number" min="0" step="50" value="{{ p.price }}" onChange="{{ p.onPrice }}" style="width:70px;border:none;outline:none;background:transparent;font:inherit;font-size:15px;font-weight:700;color:#16123A"></span>
-                <div style="display:flex;gap:4px;padding:3px;border-radius:999px;background:#F6F4FF;border:1px solid #E7E3F5;align-self:flex-start;flex-wrap:nowrap;flex:0 0 auto;width:max-content;max-width:100%"><sc-for list="{{ p.periods }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button></sc-for></div>
+                <div class="m-pills" style="display:flex;gap:4px;padding:3px;border-radius:999px;background:#F6F4FF;border:1px solid #E7E3F5;align-self:flex-start;flex-wrap:nowrap;flex:0 0 auto;width:max-content;max-width:100%"><sc-for list="{{ p.periods }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button></sc-for></div>
               </div>
               <sc-if value="{{ meterOn }}" hint-placeholder-val="{{ true }}">
                 <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px"><span style="color:#4A4666">{{ meterCap }} included</span>
@@ -1143,7 +1197,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
     </div>
 
     <sc-if value="{{ admHasSel }}" hint-placeholder-val="{{ false }}">
-      <div style="position:fixed;inset:0 0 0 {{ sbW }};z-index:45;display:flex;justify-content:flex-end">
+      <div class="m-overlay" style="position:fixed;inset:0 0 0 {{ sbW }};z-index:45;display:flex;justify-content:flex-end">
         <div onClick="{{ admClose }}" style="position:absolute;inset:0;background:rgba(22,18,58,.25)"></div>
         <div style="position:relative;width:min(420px,100%);height:100%;background:#FFFFFF;border-left:1px solid #E7E3F5;box-shadow:-16px 0 40px rgba(22,18,58,.12);display:flex;flex-direction:column">
           <div style="padding:20px;background:#F6F4FF;display:flex;flex-direction:column;gap:12px">
@@ -1177,8 +1231,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isGoals }}" hint-placeholder-val="{{ false }}">
-    <div style="display:flex;flex-wrap:nowrap;align-items:flex-start">
-      <aside style="flex:0 0 clamp(260px,26vw,340px);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#FFFFFF;border-right:1px solid #E7E3F5;padding:20px;display:flex;flex-direction:column;gap:18px">
+    <div class="m-split" style="display:flex;flex-wrap:nowrap;align-items:flex-start">
+      <aside class="m-panel" style="flex:0 0 clamp(260px,26vw,340px);min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#FFFFFF;border-right:1px solid #E7E3F5;padding:20px;display:flex;flex-direction:column;gap:18px">
         <section style="border-radius:22px;padding:18px;background:#16123A;color:#FFFFFF;display:flex;flex-direction:column;gap:10px">
           <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#D4CCFF">Overall</span>
           <div style="display:flex;align-items:baseline;gap:8px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:40px;line-height:1">{{ rmDone }}</span><span style="font-size:15px;color:#D4CCFF">of {{ rmTotal }} done</span></div>
@@ -1201,8 +1255,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
         </section>
       </aside>
 
-      <section style="flex:1 1 0;min-width:0;height:100vh;position:relative;overflow:hidden;background:#F6F4FF">
-        <div style="position:absolute;inset:0;overflow:auto;padding:24px 28px 48px;display:flex;flex-direction:column;gap:18px">
+      <section class="m-goals" style="flex:1 1 0;min-width:0;height:100vh;position:relative;overflow:hidden;background:#F6F4FF">
+        <div class="m-goals-in" style="position:absolute;inset:0;overflow:auto;padding:24px 28px 48px;display:flex;flex-direction:column;gap:18px">
           <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap">
             <div style="display:flex;flex-direction:column;gap:4px">
               <span style="font-size:11px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Milestones</span>
