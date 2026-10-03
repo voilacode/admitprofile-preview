@@ -140,25 +140,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
             <span style="font-size:32px;line-height:1">👋</span>
             <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:36px;letter-spacing:-.03em;color:#16123A">Welcome back</h2>
             <p style="margin:0;font-size:15px;line-height:1.5;color:#6E6A8A">Sign in to continue planning with Al Noor Education.</p>
+            <p style="margin:0;font-size:13px;line-height:1.5;color:#5B3DF5;font-weight:600">Demo mockup: no username or password needed.</p>
           </div>
-          <label style="display:flex;flex-direction:column;gap:8px">
-            <span style="font-size:13px;font-weight:700;color:#16123A">Username</span>
-            <span style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:2px solid {{ loginBorder }};border-radius:16px;padding:0 16px;height:54px" style-focus-within="border-color:#5B3DF5">
-              <span style="width:18px;height:18px;flex:0 0 18px;background:#6E6A8A;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/user-round.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/user-round.svg) center/contain no-repeat"></span>
-              <input value="{{ lu }}" onChange="{{ onLu }}" autoComplete="username" placeholder="Your username" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font:inherit;font-size:15px;color:#16123A">
-            </span>
-          </label>
-          <label style="display:flex;flex-direction:column;gap:8px">
-            <span style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:#16123A"><span>Password</span><span style="color:#5B3DF5;font-weight:600;cursor:pointer">Forgot?</span></span>
-            <span style="display:flex;align-items:center;gap:10px;background:#FFFFFF;border:2px solid {{ loginBorder }};border-radius:16px;padding:0 8px 0 16px;height:54px">
-              <span style="width:18px;height:18px;flex:0 0 18px;background:#6E6A8A;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/lock-keyhole.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/lock-keyhole.svg) center/contain no-repeat"></span>
-              <input type="{{ pwType }}" value="{{ lp }}" onChange="{{ onLp }}" autoComplete="current-password" placeholder="Your password" style="flex:1;min-width:0;border:none;outline:none;background:transparent;font:inherit;font-size:15px;color:#16123A">
-              <button type="button" onClick="{{ togglePw }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:700;color:#5B3DF5;padding:8px 10px;border-radius:10px" style-hover="background:#F1EEFF">{{ pwLabel }}</button>
-            </span>
-          </label>
-          <sc-if value="{{ hasLoginErr }}" hint-placeholder-val="{{ false }}">
-            <div style="display:flex;gap:10px;align-items:center;background:#FFE3EC;color:#B0174A;border-radius:14px;padding:12px 14px;font-size:14px;font-weight:600">That username or password doesn't match. Try again.</div>
-          </sc-if>
           <button type="submit" style="all:unset;cursor:pointer;box-sizing:border-box;height:56px;border-radius:16px;background:#5B3DF5;color:#FFFFFF;display:flex;align-items:center;justify-content:center;gap:10px;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:17px;box-shadow:0 10px 24px rgba(91,61,245,.3)" style-hover="background:#4A2EE0">{{ loginCta }}</button>
           <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:#6E6A8A"><span style="flex:1;height:1px;background:#E7E3F5"></span>New here?<span style="flex:1;height:1px;background:#E7E3F5"></span></div>
           <button type="button" style="all:unset;cursor:pointer;box-sizing:border-box;height:52px;border-radius:16px;background:#FFFFFF;border:2px solid #E7E3F5;color:#16123A;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700" style-hover="border-color:#D4CCFF">Create a free account</button>
@@ -2176,7 +2159,7 @@ class Component extends DCLogic {
       lu: this.state.lu, lp: this.state.lp, onLu: (e) => this.setState({ lu: e.target.value, loginErr: false }), onLp: (e) => this.setState({ lp: e.target.value, loginErr: false }),
       pwType: this.state.showPw ? 'text' : 'password', pwLabel: this.state.showPw ? 'Hide' : 'Show', togglePw: () => this.setState(s => ({ showPw: !s.showPw })),
       hasLoginErr: this.state.loginErr, loginBorder: this.state.loginErr ? '#E8336D' : '#E7E3F5', loginCta: this.state.loggingIn ? 'Signing in…' : 'Sign in',
-      doLogin: (e) => { e.preventDefault(); if (this.state.lu.trim().toLowerCase() === 'krishnateja' && this.state.lp === 's#per123$') { this.setState({ loggingIn: true }); setTimeout(() => this.setState({ loggedOut: false, loggingIn: false, lp: '', showPw: false, tab: 'explore', profOpen: false }), 700); } else this.setState({ loginErr: true }); },
+      doLogin: (e) => { e.preventDefault(); this.setState({ loggingIn: true }); setTimeout(() => this.setState({ loggedOut: false, loggingIn: false, lp: '', showPw: false, tab: 'explore', profOpen: false }), 700); },
       markAll: () => this.setState({ readN: Object.fromEntries(NUDGES.map(n => [n[0], true])) }),
       toggleWa: () => this.setState(s => ({ waNudges: !s.waNudges })), waTrack: this.state.waNudges ? '#5B3DF5' : '#D5CFEE', waKnob: this.state.waNudges ? '18px' : '2px',
       progsOld: progs, progCount: progs.length, pSearch: this.state.pSearch, onPSearch: (e) => this.setState({ pSearch: e.target.value }),
