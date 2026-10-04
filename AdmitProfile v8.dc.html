@@ -74,7 +74,18 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   .m-tap { padding: 10px 0 !important; }
 
   /* Profiler */
-  .m-full { flex: 1 1 100% !important; min-width: 0 !important; }
+  /* Assessment card: icon beside the title, bars and buttons side by side */
+  .m-acard { display: grid !important; grid-template-columns: 36px minmax(0, 1fr); gap: 12px 12px !important; padding: 14px !important; align-items: start !important; border-radius: 20px !important; }
+  .m-aicon { width: 36px !important; height: 36px !important; border-radius: 11px !important; }
+  .m-aicon > span { width: 19px !important; height: 19px !important; }
+  .m-abody { gap: 10px !important; }
+  .m-abody > div:first-child > span:first-child { font-size: 17px !important; line-height: 1.2; }
+  .m-abody > div:first-child > span:last-child { font-size: 13px !important; line-height: 1.4 !important; }
+  .m-aparts { gap: 14px !important; flex-wrap: nowrap !important; }
+  .m-full { flex: 1 1 0 !important; min-width: 0 !important; }
+  .m-awarn { grid-column: 1 / -1; }
+  .m-abtns { grid-column: 1 / -1; display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px !important; }
+  .m-abtns > button { text-align: center; padding: 11px 8px !important; overflow: hidden; text-overflow: ellipsis; }
   .m-meter { display: grid !important; grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px !important; }
   .m-meter > span:last-child { display: contents !important; }
   .m-meter > span:last-child > span:first-child { grid-row: 2; grid-column: 1; padding-left: 40px; }
@@ -748,14 +759,14 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   <sc-if value="{{ isProfiler }}" hint-placeholder-val="{{ false }}">
     <div class="m-page" style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:18px;max-width:1240px;margin:0 auto;width:100%;box-sizing:border-box">
       <sc-if value="{{ pfAssessOpen }}" hint-placeholder-val="{{ true }}">
-        <section style="border-radius:24px;padding:18px 20px;background:#FFFFFF;border:2px solid {{ pfAssessBorder }};display:flex;gap:18px;align-items:center;flex-wrap:wrap;box-shadow:{{ pfAssessShadow }}">
-          <div style="width:52px;height:52px;flex:0 0 52px;border-radius:16px;background:{{ pfAssessIconBg }};display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;background:#FFFFFF;-webkit-mask:{{ pfAssessIcon }};mask:{{ pfAssessIcon }}"></span></div>
-          <div style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:8px">
+        <section class="m-acard" style="border-radius:24px;padding:18px 20px;background:#FFFFFF;border:2px solid {{ pfAssessBorder }};display:flex;gap:18px;align-items:center;flex-wrap:wrap;box-shadow:{{ pfAssessShadow }}">
+          <div class="m-aicon" style="width:52px;height:52px;flex:0 0 52px;border-radius:16px;background:{{ pfAssessIconBg }};display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;background:#FFFFFF;-webkit-mask:{{ pfAssessIcon }};mask:{{ pfAssessIcon }}"></span></div>
+          <div class="m-abody" style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:8px">
             <div style="display:flex;flex-direction:column;gap:2px">
               <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:20px">{{ pfAssessTitle }}</span>
               <span style="font-size:13px;color:#4A4666;line-height:1.45">{{ pfAssessText }}</span>
             </div>
-            <div style="display:flex;gap:18px;flex-wrap:wrap">
+            <div class="m-aparts" style="display:flex;gap:18px;flex-wrap:wrap">
               <sc-for list="{{ pfAssessParts }}" as="p" hint-placeholder-count="2">
                 <div class="m-full" style="display:flex;flex-direction:column;gap:5px;min-width:160px">
                   <div style="display:flex;justify-content:space-between;gap:10px;font-size:12px"><span style="font-weight:700">{{ p.label }}</span><span style="color:#6E6A8A">{{ p.count }}</span></div>
@@ -765,11 +776,11 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
             </div>
           </div>
           <sc-if value="{{ pfAssessDone }}" hint-placeholder-val="{{ false }}">
-            <div style="flex:1 1 100%;order:3;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:14px;background:#FFF4DA;font-size:12px;line-height:1.45;color:#6B3F00">
+            <div class="m-awarn" style="flex:1 1 100%;order:3;display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:14px;background:#FFF4DA;font-size:12px;line-height:1.45;color:#6B3F00">
               <span style="font-weight:800">!</span><span>Changing answers can shift your child’s persona, career matches and milestones a lot. We recommend it only when something has really changed, like a new interest that has lasted a few months.</span>
             </div>
           </sc-if>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <div class="m-abtns" style="display:flex;gap:8px;flex-wrap:wrap">
             <sc-for list="{{ pfAssessBtns }}" as="b" hint-placeholder-count="2">
               <button onClick="{{ b.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;background:{{ b.bg }};color:#FFFFFF">{{ b.label }}</button>
             </sc-for>
