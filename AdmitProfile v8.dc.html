@@ -106,9 +106,9 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   .m-pscroll { position: relative !important; inset: auto !important; height: 440px; margin-top: 4px; }
   .m-board { zoom: .8; margin-top: -80px; }
   .m-plegend { position: static !important; max-width: none !important; margin: 4px 14px 0; }
-  /* Universities that fit (unis_patch.py): a section under the path, cards stacked */
-  .m-unis { position: static !important; margin: 14px 14px 0; padding: 14px !important; box-shadow: none !important; }
-  .m-unirow { grid-auto-flow: row !important; grid-template-columns: 1fr !important; grid-auto-columns: auto !important; overflow: visible !important; }
+  /* Universities that fit (unis_patch.py): the drawer becomes a full-screen sheet */
+  .m-unisheet { position: fixed !important; inset: 0 0 calc(64px + env(safe-area-inset-bottom)) 0 !important; width: auto !important; border-radius: 0 !important; border: 0 !important; z-index: 35 !important; }
+  .m-unibtn { margin-left: 0 !important; padding: 11px 16px !important; }
   .m-chip { padding: 8px 14px !important; }
   .m-crow { padding: 11px 10px !important; }
 
@@ -512,7 +512,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
       </aside>
 
       <section class="m-canvas" style="flex:1 1 0;min-width:0;height:100vh;position:relative;overflow:hidden;background:#FAF9FF radial-gradient(circle, #DDD8F3 1px, transparent 1.2px) 0 0/18px 18px">
-        <div class="m-pscroll" style="position:absolute;inset:0 0 {{ g.uniScrollBottom }} 0;overflow:auto">
+        <div class="m-pscroll" style="position:absolute;inset:0;overflow:auto">
           <div class="m-board" style="position:relative;width:1180px;height:620px">
             <sc-for list="{{ g.cols }}" as="c" hint-placeholder-count="5">
               <div style="position:absolute;top:104px;left:{{ c.x }};width:160px;display:flex;flex-direction:column;align-items:center;gap:1px;text-align:center">
@@ -546,31 +546,29 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
               <span class="m-wrap" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:19px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">How Omar could become a {{ g.nameLower }}</span>
             </div>
           </div>
+          <button class="m-unibtn" onClick="{{ g.uniToggle }}" style="pointer-events:auto;all:unset;cursor:pointer;margin-left:auto;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700;padding:9px 16px;border-radius:999px;background:{{ g.uniBtnBg }};color:#0E8A5F;border:1.5px solid #9EE0C2;box-shadow:0 6px 18px rgba(22,18,58,.06)"><span style="width:16px;height:16px;flex:0 0 16px;background:#0E8A5F;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat"></span>{{ g.uniBtnLabel }}</button>
           <button onClick="{{ g.save }}" style="pointer-events:auto;all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;background:{{ g.saveBg }};color:{{ g.saveColor }};box-shadow:0 6px 18px rgba(22,18,58,.08)">{{ g.saveLabel }}</button>
         </div>
 
-        <div class="m-plegend" style="position:absolute;left:16px;bottom:{{ g.uniLegendBottom }};max-width:calc(100% - 32px);display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 14px;border-radius:14px;background:#FFFFFFE6;border:1px solid #E7E3F5;font-size:11px;color:#6E6A8A;white-space:nowrap">
+        <div class="m-plegend" style="position:absolute;left:16px;bottom:16px;max-width:calc(100% - 32px);display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 14px;border-radius:14px;background:#FFFFFFE6;border:1px solid #E7E3F5;font-size:11px;color:#6E6A8A;white-space:nowrap">
           <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:{{ g.color }}"></span>Main path</span>
           <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;border:2px solid {{ g.color }};box-sizing:border-box"></span>Where it can lead</span>
           <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;border:2px dashed #A19DBA;box-sizing:border-box"></span>Nearby career</span>
                   </div>
 
-        <section class="m-unis" style="position:absolute;left:16px;right:16px;bottom:16px;z-index:2;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;box-shadow:0 12px 30px rgba(22,18,58,.08);padding:14px 16px;display:flex;flex-direction:column;gap:12px">
-          <div style="display:flex;align-items:center;gap:12px">
-            <span style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#DDF7EA;display:flex;align-items:center;justify-content:center"><span style="width:20px;height:20px;flex:0 0 20px;background:#0E8A5F;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat"></span></span>
-            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
-              <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0E8A5F">Universities that fit this path</span>
-              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:17px;line-height:1.2">{{ g.uniMajor }}</span>
+        <sc-if value="{{ g.uniOpen }}" hint-placeholder-val="{{ false }}">
+          <div class="m-unisheet" style="position:absolute;top:16px;right:16px;bottom:16px;width:min(380px,calc(100% - 32px));z-index:7;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;box-shadow:0 18px 40px rgba(22,18,58,.14);display:flex;flex-direction:column;overflow:hidden">
+            <div style="padding:16px 18px 14px;background:#EAF8F1;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#0E8A5F">Universities that fit this path</span>
+                <button onClick="{{ g.uniClose }}" title="Close" style="all:unset;cursor:pointer;width:32px;height:32px;flex:0 0 32px;border-radius:50%;background:#FFFFFF;display:flex;align-items:center;justify-content:center;font-size:16px;color:#16123A">×</button>
+              </div>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:19px;line-height:1.2">{{ g.uniMajor }}</span>
+              <span style="font-size:12px;color:#4A4666">For a {{ g.nameLower }}<sc-if value="{{ g.hasUniShort }}" hint-placeholder-val="{{ false }}"> · <b style="color:#5B3DF5">{{ g.uniShort }}</b></sc-if></span>
             </div>
-            <sc-if value="{{ g.hasUniShort }}" hint-placeholder-val="{{ false }}">
-              <span style="font-size:12px;font-weight:700;color:#5B3DF5;background:#E6E1FF;padding:4px 10px;border-radius:999px;white-space:nowrap">{{ g.uniShort }}</span>
-            </sc-if>
-            <button onClick="{{ g.uniToggle }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:700;color:#5B3DF5;padding:8px 10px;border-radius:10px;white-space:nowrap">{{ g.uniToggleLabel }}</button>
-          </div>
-          <sc-if value="{{ g.uniOpen }}" hint-placeholder-val="{{ true }}">
-            <div class="m-unirow" style="display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:10px;overflow-x:auto">
+            <div style="flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:10px">
               <sc-for list="{{ g.uniRows }}" as="u" hint-placeholder-count="4">
-                <div style="border:1px solid #E7E3F5;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;background:#FAF9FF;min-width:0">
+                <div style="border:1px solid #E7E3F5;border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:5px;background:#FAF9FF">
                   <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
                     <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ u.bg }};color:{{ u.fg }};white-space:nowrap">{{ u.fit }} fit</span>
                     <span style="font-size:12px;font-weight:600;color:#4A4666;white-space:nowrap">{{ u.cost }}</span>
@@ -578,14 +576,13 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
                   <span style="font-size:15px;font-weight:700;line-height:1.25">{{ u.name }}</span>
                   <span style="font-size:12px;color:#6E6A8A">{{ u.city }}<sc-if value="{{ u.hasOver }}" hint-placeholder-val="{{ false }}"> · <span style="color:#E8336D;font-weight:600">{{ u.overText }}</span></sc-if></span>
                   <span style="font-size:12px;line-height:1.4;color:#4A4666">{{ u.needs }}</span>
-                  <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;margin-top:auto;font-size:12px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:6px 12px;border-radius:999px">{{ u.saveLabel }}</button>
+                  <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;margin-top:2px;font-size:12px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:7px 12px;border-radius:999px">{{ u.saveLabel }}</button>
                 </div>
               </sc-for>
+              <span style="font-size:11px;color:#6E6A8A;line-height:1.45;padding:2px 2px 4px">{{ g.uniNote }}</span>
             </div>
-            <span style="font-size:11px;color:#6E6A8A;line-height:1.4">{{ g.uniNote }}</span>
-          </sc-if>
-        </section>
-
+          </div>
+        </sc-if>
         <sc-if value="{{ hasDrawer }}" hint-placeholder-val="{{ false }}">
           <div style="position:absolute;top:16px;right:16px;bottom:16px;width:min(340px,calc(100% - 32px));background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;box-shadow:0 18px 40px rgba(22,18,58,.16);display:flex;flex-direction:column;overflow:hidden;z-index:20">
             <div style="padding:18px 18px 16px;background:{{ d.tint }};display:flex;flex-direction:column;gap:6px">
@@ -2268,13 +2265,15 @@ class Component extends DCLogic {
     const QSHORT = { s1: 'Free afternoon', s2: 'Favourite subjects', s3: 'Works best', s4: 'Dream workday', s5: 'Career certainty', p1: 'Weekly time', p2: 'Family support', p3: 'Priorities now', p4: 'Activity budget', p5: 'University budget', p6: 'University regions' };
     const ansOf = (q, col) => { const v = this.state.ans[q.id]; const picks = Array.isArray(v) ? v : v != null ? [v] : []; return picks.length ? picks.map(i => ({ t: q.opts[i][0], bg: col + '1F', fg: '#16123A' })) : [{ t: 'Not answered yet', bg: '#F6F4FF', fg: '#A19DBA' }]; };
     const pfAnswers = [['Omar’s answers', SQ, '#FF8A00'], ['Family preferences', PQ, '#00A3FF']].map(([title, L, col]) => ({ title, color: col, count: answered(L) + ' of ' + L.length, items: L.map(q => ({ q: QSHORT[q.id], a: ansOf(q, col) })) }));
-    // Universities that fit this path: the last step of the selected career.
-    const uniOpen = this.state.uniOpen !== false, shortlist = this.state.shortlist || {};
+    // Universities that fit this path: opened from the path header, closed by default.
+    // A node's details drawer takes the same spot, so it wins while it is open.
+    const uniOpen = this.state.uniOpen === true && !drawer, shortlist = this.state.shortlist || {};
     const uniRows = uniEx(selC).map(u => { const on = !!shortlist[u.name]; return { ...u, hasOver: !!u.overText, saveLabel: on ? '★ Shortlisted' : '☆ Shortlist', saveBg: on ? '#E6E1FF' : '#FFFFFF',
       toggle: () => this.setState(s => ({ shortlist: { ...(s.shortlist || {}), [u.name]: !(s.shortlist || {})[u.name] } })) }; });
     const nShort = Object.values(shortlist).filter(Boolean).length;
-    Object.assign(graph, { uniOpen, uniRows, uniMajor: CMAJOR[selC.id][0], uniToggle: () => this.setState({ uniOpen: !uniOpen }), uniToggleLabel: uniOpen ? 'Hide' : 'Show',
-      uniScrollBottom: uniOpen ? '330px' : '96px', uniLegendBottom: uniOpen ? '334px' : '100px', hasUniShort: nShort > 0, uniShort: nShort + ' shortlisted',
+    Object.assign(graph, { uniOpen, uniRows, uniMajor: CMAJOR[selC.id][0],
+      uniToggle: () => this.setState({ uniOpen: !uniOpen, selNode: null }), uniClose: () => this.setState({ uniOpen: false }),
+      uniBtnLabel: 'Universities · ' + uniRows.length, uniBtnBg: uniOpen ? '#DDF7EA' : '#FFFFFF', hasUniShort: nShort > 0, uniShort: nShort + ' shortlisted',
       uniNote: (a3.p5 == null ? 'Using a general budget and all regions until the parent assessment is done. ' : 'Using your budget and regions from the parent assessment. ') + 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance.' });
     return {
       aViews: [['compare','Compare'],['map','Path'],['unis','Universities'],['profile','Profile'],['milestones','Milestones']].map(([id, label]) => { const on = aV === id; return { label, go: () => this.setState({ aView: id }), bg: on ? '#5B3DF5' : 'transparent', color: on ? '#FFFFFF' : '#16123A' }; }),
