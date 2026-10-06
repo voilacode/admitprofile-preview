@@ -114,6 +114,12 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   .m-unibtn { margin-left: 0 !important; padding: 11px 16px !important; }
   /* University explorer (explorer_patch.py): narrower compare columns, label column stays put */
   .m-cmpgrid { grid-template-columns: 104px repeat(var(--n), 160px) !important; min-width: 0 !important; }
+  .m-xmain { padding: 18px 14px 32px !important; }
+  .m-xside { gap: 12px !important; }
+  .m-xftoggle { display: inline-flex !important; }
+  .m-xfbody[data-open="no"] { display: none !important; }
+  .m-uhero { height: 240px !important; border-radius: 22px !important; }
+  .m-uname { font-size: 28px !important; }
   .m-chip { padding: 8px 14px !important; }
   .m-crow { padding: 11px 10px !important; }
 
@@ -649,103 +655,222 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   </sc-if>
 
   <sc-if value="{{ isUniEx }}" hint-placeholder-val="{{ false }}">
-    <div class="m-page" style="display:flex;flex-direction:column;gap:18px;padding:28px 32px 64px;max-width:1200px;margin:0 auto;width:100%;box-sizing:border-box">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
-        <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
-          <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0E8A5F">University explorer</span>
-          <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;font-size:32px;line-height:1.1">Universities for Omar</h1>
-          <span style="font-size:14px;color:#6E6A8A;line-height:1.5">{{ x.total }} universities in the US and Qatar, matched to Omar’s profile and your budget.</span>
+
+    <sc-if value="{{ x.isList }}" hint-placeholder-val="{{ true }}">
+    <div class="m-split" style="box-sizing:border-box;display:flex;align-items:flex-start;flex-wrap:nowrap">
+      <aside class="m-panel m-xside" style="box-sizing:border-box;flex:0 0 300px;min-width:0;height:100vh;position:sticky;top:0;overflow:auto;background:#FFFFFF;border-right:1px solid #E7E3F5;padding:20px;display:flex;flex-direction:column;gap:16px">
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:10px">
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:18px">Filters</span>
+          <sc-if value="{{ x.hasActive }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ x.reset }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:700;color:#5B3DF5;padding:6px 2px">Reset · {{ x.activeN }}</button>
+          </sc-if>
+          <button class="m-xftoggle" onClick="{{ x.toggleFilters }}" style="all:unset;cursor:pointer;display:none;font-size:13px;font-weight:700;color:#5B3DF5;padding:8px 2px">{{ x.filtersLabel }}</button>
         </div>
-        <div class="m-pills" style="display:flex;padding:4px;gap:4px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E3F5">
-          <sc-for list="{{ x.views }}" as="o" hint-placeholder-count="2">
-            <button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:700;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button>
-          </sc-for>
+        <input value="{{ x.q }}" onChange="{{ x.onQ }}" placeholder="Search by name or city" style="box-sizing:border-box;width:100%;border:1px solid #E7E3F5;border-radius:12px;padding:11px 14px;font:inherit;font-size:14px;outline:none;background:#FAF9FF">
+        <div class="m-xfbody" style="box-sizing:border-box;display:flex;flex-direction:column;gap:16px" data-open="{{ x.filtersOpen }}">
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Field</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.fields }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Where</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.regions }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Yearly cost</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.costs }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Fit for Omar</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.fits }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Campus size</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.sizes }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Admission</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.sels }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase">Type</span>
+            <div style="box-sizing:border-box;display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ x.types }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:8px;border-top:1px solid #F0EDF9;padding-top:14px">
+            <button onClick="{{ x.toggleBudget }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;padding:6px 0"><span style="width:20px;height:20px;flex:0 0 20px;box-sizing:border-box;border-radius:6px;border:2px solid {{ x.budgetBox }};background:{{ x.budgetFill }};color:#FFFFFF;font-size:13px;display:flex;align-items:center;justify-content:center">{{ x.budgetTick }}</span>Within your budget</button>
+            <button onClick="{{ x.toggleShortOnly }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;padding:6px 0"><span style="width:20px;height:20px;flex:0 0 20px;box-sizing:border-box;border-radius:6px;border:2px solid {{ x.shortBox }};background:{{ x.shortFill }};color:#FFFFFF;font-size:13px;display:flex;align-items:center;justify-content:center">{{ x.shortTick }}</span>Shortlisted only</button>
+            <span style="font-size:12px;color:#6E6A8A;line-height:1.45">{{ x.budgetNote }}</span>
+          </div>
         </div>
+      </aside>
+
+      <section class="m-xmain" style="box-sizing:border-box;flex:1 1 0;min-width:0;padding:26px 28px 64px;display:flex;flex-direction:column;gap:16px">
+        <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+          <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:4px;min-width:0">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0E8A5F">University explorer</span>
+            <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;font-size:32px;line-height:1.1">Universities for Omar</h1>
+            <span style="font-size:14px;color:#6E6A8A;line-height:1.5">{{ x.total }} universities in the US and Qatar, matched to Omar’s profile and your budget.</span>
+          </div>
+          <div class="m-pills" style="box-sizing:border-box;display:flex;padding:4px;gap:4px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E3F5">
+            <sc-for list="{{ x.views }}" as="o" hint-placeholder-count="2">
+              <button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:700;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ x.isExplore }}" hint-placeholder-val="{{ true }}">
+          <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap">
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:18px">{{ x.countLabel }}</span>
+            <div style="box-sizing:border-box;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <span style="font-size:13px;color:#6E6A8A">Sort</span>
+              <sc-for list="{{ x.sorts }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <sc-if value="{{ x.none }}" hint-placeholder-val="{{ false }}">
+            <div style="box-sizing:border-box;background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:20px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:14px;color:#6E6A8A">No universities match these filters.<button onClick="{{ x.reset }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;color:#5B3DF5;padding:6px 10px">Reset filters</button></div>
+          </sc-if>
+          <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px">
+            <sc-for list="{{ x.rows }}" as="u" hint-placeholder-count="6">
+              <div style="box-sizing:border-box;background:#FFFFFF;border:1px solid {{ u.border }};border-radius:22px;overflow:hidden;display:flex;flex-direction:column">
+                <button onClick="{{ u.open }}" style="all:unset;cursor:pointer;display:block;position:relative;height:150px;background:#EDE9FB">
+                  <img src="{{ u.img }}" alt="{{ u.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+                  <span style="position:absolute;left:12px;top:12px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:{{ u.bg }};color:{{ u.fg }};box-shadow:0 2px 8px rgba(22,18,58,.15)">{{ u.fit }} fit</span>
+                </button>
+                <div style="box-sizing:border-box;padding:14px 16px 16px;display:flex;flex-direction:column;gap:7px;flex:1">
+                  <button onClick="{{ u.open }}" style="all:unset;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:18px;line-height:1.2">{{ u.name }}</button>
+                  <span style="font-size:13px;color:#6E6A8A">{{ u.place }}</span>
+                  <span style="font-size:13px"><b>{{ u.cost }}</b> · <span style="color:{{ u.overColor }};font-weight:600">{{ u.overText }}</span></span>
+                  <div style="box-sizing:border-box;display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.kind }}</span><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.size }}</span><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.sel }}</span></div>
+                  <div style="box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto;padding-top:6px">
+                    <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:8px 12px;border-radius:999px">{{ u.saveLabel }}</button>
+                    <button onClick="{{ u.open }}" style="all:unset;cursor:pointer;font-size:13px;font-weight:700;color:#16123A;padding:8px 2px">View details →</button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ x.isCompare }}" hint-placeholder-val="{{ false }}">
+          <sc-if value="{{ x.cmpFew }}" hint-placeholder-val="{{ false }}">
+            <section style="box-sizing:border-box;background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:22px;padding:32px 22px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:20px">Compare universities side by side</span>
+              <span style="font-size:14px;color:#6E6A8A;line-height:1.5;max-width:440px">{{ x.cmpHint }}</span>
+              <div style="box-sizing:border-box;display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+                <button onClick="{{ x.quickPick }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#5B3DF5;color:#FFFFFF">Shortlist the top 3 matches</button>
+                <button onClick="{{ x.goExplore }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#FFFFFF;color:#16123A;border:1px solid #E7E3F5">Browse universities</button>
+              </div>
+            </section>
+          </sc-if>
+          <sc-if value="{{ x.canCompare }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:13px;color:#6E6A8A">{{ x.cmpTitle }}</span>
+            <section style="box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;overflow:hidden">
+              <div style="box-sizing:border-box;overflow-x:auto">
+                <div class="m-cmpgrid" style="display:grid;grid-template-columns:{{ x.cmpGrid }};min-width:{{ x.cmpMin }};--n:{{ x.cmpN }}">
+                  <div style="position:sticky;left:0;z-index:1;background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:14px 16px;font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:flex-end">Compare</div>
+                  <sc-for list="{{ x.cmpCols }}" as="c" hint-placeholder-count="3">
+                    <div style="box-sizing:border-box;background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:12px 14px 14px;display:flex;flex-direction:column;gap:5px">
+                      <button onClick="{{ c.open }}" style="all:unset;cursor:pointer;display:block;height:84px;border-radius:12px;overflow:hidden;background:#EDE9FB"><img src="{{ c.img }}" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"></button>
+                      <button onClick="{{ c.open }}" style="all:unset;cursor:pointer;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:16px;line-height:1.2">{{ c.name }}</button>
+                      <span style="font-size:12px;color:#6E6A8A">{{ c.place }}</span>
+                      <button onClick="{{ c.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:12px;font-weight:700;color:#E8336D;padding:4px 0">Remove</button>
+                    </div>
+                  </sc-for>
+                  <sc-for list="{{ x.cmpRows }}" as="r" hint-placeholder-count="10">
+                    <div style="position:sticky;left:0;z-index:1;background:#FFFFFF;border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:13px;font-weight:700;color:#4A4666">{{ r.label }}</div>
+                    <sc-for list="{{ r.cells }}" as="v" hint-placeholder-count="3">
+                      <div style="box-sizing:border-box;border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:14px;line-height:1.45;color:{{ v.color }};font-weight:{{ v.weight }}">{{ v.v }}</div>
+                    </sc-for>
+                  </sc-for>
+                </div>
+              </div>
+            </section>
+          </sc-if>
+        </sc-if>
+        <span style="font-size:12px;color:#6E6A8A;line-height:1.5">{{ x.note }}</span>
+      </section>
+    </div>
+    </sc-if>
+
+    <sc-if value="{{ x.isDetail }}" hint-placeholder-val="{{ false }}">
+    <div class="m-page" style="box-sizing:border-box;display:flex;flex-direction:column;gap:18px;padding:24px 32px 64px;max-width:1120px;margin:0 auto;width:100%">
+      <button onClick="{{ x.back }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:14px;font-weight:700;color:#5B3DF5;padding:8px 2px">← All universities</button>
+      <section class="m-uhero" style="box-sizing:border-box;position:relative;height:360px;border-radius:28px;overflow:hidden;background:#16123A">
+        <img src="{{ ud.img }}" alt="{{ ud.name }}" style="width:100%;height:100%;object-fit:cover;display:block">
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(22,18,58,0) 35%,rgba(22,18,58,.88) 100%)"></div>
+        <button onClick="{{ ud.toggle }}" style="all:unset;cursor:pointer;position:absolute;top:16px;right:16px;font-size:14px;font-weight:700;padding:10px 16px;border-radius:999px;background:{{ ud.saveBg }};color:#5B3DF5;box-shadow:0 6px 18px rgba(0,0,0,.18)">{{ ud.saveLabel }}</button>
+        <div style="position:absolute;left:24px;right:24px;bottom:22px;display:flex;flex-direction:column;gap:8px;color:#FFFFFF">
+          <span style="align-self:flex-start;font-size:13px;font-weight:700;padding:5px 12px;border-radius:999px;background:{{ ud.bg }};color:{{ ud.fg }}">{{ ud.fit }} fit for Omar</span>
+          <h1 class="m-uname" style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;font-size:40px;line-height:1.05">{{ ud.name }}</h1>
+          <span style="font-size:15px;color:#E6E1FF">{{ ud.place }}</span>
+        </div>
+      </section>
+      <span style="font-size:11px;color:#6E6A8A;line-height:1.4;margin-top:-8px">Photo: {{ ud.credit }} · <a href="{{ ud.creditUrl }}" target="_blank" rel="noopener" style="color:#6E6A8A">Wikimedia Commons</a></span>
+
+      <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+        <sc-for list="{{ ud.facts }}" as="f" hint-placeholder-count="6">
+          <div style="box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:12px;font-weight:600;color:#6E6A8A">{{ f.label }}</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:19px;line-height:1.2;color:{{ f.color }}">{{ f.value }}</span>
+            <span style="font-size:12px;color:#6E6A8A">{{ f.sub }}</span>
+          </div>
+        </sc-for>
       </div>
 
-      <sc-if value="{{ x.isExplore }}" hint-placeholder-val="{{ true }}">
-        <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:14px">
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase">Field</span>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <sc-for list="{{ x.fields }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase">Where</span>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <sc-for list="{{ x.regions }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
-            </div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;border-top:1px solid #F0EDF9;padding-top:14px">
-            <button onClick="{{ x.toggleBudget }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;background:{{ x.budgetBg }};color:{{ x.budgetColor }};border:1px solid {{ x.budgetBorder }}">{{ x.budgetLabel }}</button>
-            <span style="font-size:13px;color:#6E6A8A">{{ x.budgetNote }}</span>
-          </div>
-        </section>
-
-        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
-          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px">{{ x.countLabel }}</span>
-          <span style="font-size:13px;color:#6E6A8A">Best fit for Omar first</span>
-        </div>
-        <sc-if value="{{ x.none }}" hint-placeholder-val="{{ false }}">
-          <div style="background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:20px;padding:28px 20px;text-align:center;font-size:14px;color:#6E6A8A">No universities match these filters. Try another field, place or budget.</div>
-        </sc-if>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px">
-          <sc-for list="{{ x.rows }}" as="u" hint-placeholder-count="6">
-            <div style="background:#FFFFFF;border:1px solid {{ u.border }};border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-                <span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:{{ u.bg }};color:{{ u.fg }};white-space:nowrap">{{ u.fit }} fit</span>
-                <span style="font-size:14px;font-weight:700;white-space:nowrap">{{ u.cost }}</span>
-              </div>
-              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:18px;line-height:1.2">{{ u.name }}</span>
-              <span style="font-size:13px;color:#6E6A8A">{{ u.place }} · <span style="color:{{ u.overColor }};font-weight:600">{{ u.overText }}</span></span>
-              <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.size }}</span><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.sel }}</span></div>
-              <span style="font-size:13px;color:#4A4666;line-height:1.45"><b style="color:#16123A">Fields:</b> {{ u.fields }}</span>
-              <span style="font-size:13px;color:#4A4666;line-height:1.45">{{ u.needs }}</span>
-              <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;margin-top:auto;font-size:13px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:8px 14px;border-radius:999px">{{ u.saveLabel }}</button>
-            </div>
-          </sc-for>
-        </div>
-      </sc-if>
-
-      <sc-if value="{{ x.isCompare }}" hint-placeholder-val="{{ false }}">
-        <sc-if value="{{ x.cmpFew }}" hint-placeholder-val="{{ false }}">
-          <section style="background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:22px;padding:32px 22px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
-            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px">Compare universities side by side</span>
-            <span style="font-size:14px;color:#6E6A8A;line-height:1.5;max-width:440px">{{ x.cmpHint }}</span>
-            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
-              <button onClick="{{ x.quickPick }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#5B3DF5;color:#FFFFFF">Shortlist the top 3 matches</button>
-              <button onClick="{{ x.goExplore }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#FFFFFF;color:#16123A;border:1px solid #E7E3F5">Browse universities</button>
+      <div style="box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start">
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+          <section style="box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:20px 22px;display:flex;flex-direction:column;gap:10px">
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:20px">About</span>
+            <span style="font-size:15px;line-height:1.65;color:#2E2A4F">{{ ud.about }}</span>
+            <a href="{{ ud.wiki }}" target="_blank" rel="noopener" style="font-size:13px;font-weight:700;color:#5B3DF5;text-decoration:none;align-self:flex-start;padding:10px 0">Read more on Wikipedia ↗</a>
+          </section>
+          <section style="box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:20px">Fields you can study here</span>
+            <div style="box-sizing:border-box;display:flex;gap:8px;flex-wrap:wrap"><sc-for list="{{ ud.fields }}" as="t" hint-placeholder-count="3"><span style="font-size:13px;font-weight:700;padding:7px 12px;border-radius:999px;background:{{ t.bg }};color:{{ t.fg }}">{{ t.name }}</span></sc-for></div>
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.05em;text-transform:uppercase;margin-top:4px">Careers Omar could aim for from here</span>
+            <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ ud.careers }}" as="c" hint-placeholder-count="4">
+                <button onClick="{{ c.go }}" style="all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:#FAF9FF;border:1px solid #F0EDF9;font-size:14px;font-weight:600"><span>{{ c.name }}</span><span style="font-size:12px;font-weight:700;color:#5B3DF5;white-space:nowrap">See the path →</span></button>
+              </sc-for>
             </div>
           </section>
-        </sc-if>
-        <sc-if value="{{ x.canCompare }}" hint-placeholder-val="{{ false }}">
-          <span style="font-size:13px;color:#6E6A8A">{{ x.cmpTitle }}</span>
-          <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;overflow:hidden">
-            <div style="overflow-x:auto">
-              <div class="m-cmpgrid" style="display:grid;grid-template-columns:{{ x.cmpGrid }};min-width:{{ x.cmpMin }};--n:{{ x.cmpN }}">
-                <div style="position:sticky;left:0;z-index:1;background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:14px 16px;font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:flex-end">Compare</div>
-                <sc-for list="{{ x.cmpCols }}" as="c" hint-placeholder-count="3">
-                  <div style="background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
-                    <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;line-height:1.2">{{ c.name }}</span>
-                    <span style="font-size:12px;color:#6E6A8A">{{ c.place }}</span>
-                    <button onClick="{{ c.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:12px;font-weight:700;color:#E8336D;padding:4px 0">Remove</button>
-                  </div>
-                </sc-for>
-                <sc-for list="{{ x.cmpRows }}" as="r" hint-placeholder-count="8">
-                  <div style="position:sticky;left:0;z-index:1;background:#FFFFFF;border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:13px;font-weight:700;color:#4A4666">{{ r.label }}</div>
-                  <sc-for list="{{ r.cells }}" as="v" hint-placeholder-count="3">
-                    <div style="border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:14px;line-height:1.45;color:{{ v.color }};font-weight:{{ v.weight }}">{{ v.v }}</div>
-                  </sc-for>
-                </sc-for>
-              </div>
-            </div>
+        </div>
+        <div style="box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+          <section style="box-sizing:border-box;background:#16123A;color:#FFFFFF;border-radius:22px;padding:20px 22px;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#B7A9FF">Fit for Omar</span>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:26px;line-height:1.15">{{ ud.fitTitle }}</span>
+            <span style="font-size:14px;line-height:1.55;color:#D4CCFF">{{ ud.needs }}</span>
+            <span style="font-size:12px;line-height:1.5;color:#A9A3D6">Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance.</span>
+            <button onClick="{{ ud.goPlan }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:14px;font-weight:700;padding:10px 16px;border-radius:999px;background:#FFFFFF;color:#16123A">See Omar’s milestones →</button>
           </section>
-        </sc-if>
-      </sc-if>
-
-      <span style="font-size:12px;color:#6E6A8A;line-height:1.5">{{ x.note }}</span>
+          <section style="box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:18px 20px;display:flex;flex-direction:column;gap:8px">
+            <button onClick="{{ ud.toggle }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:12px 16px;border-radius:14px;background:{{ ud.saveBg }};color:#5B3DF5;border:1px solid #D4CCFF;text-align:center">{{ ud.saveLabel }}</button>
+            <button onClick="{{ ud.compare }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:12px 16px;border-radius:14px;background:#FFFFFF;color:#16123A;border:1px solid #E7E3F5;text-align:center">Compare with others</button>
+            <button onClick="{{ ud.ask }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:12px 16px;border-radius:14px;background:#5B3DF5;color:#FFFFFF;text-align:center">Ask the assistant about it</button>
+            <sc-if value="{{ ud.hasSite }}" hint-placeholder-val="{{ true }}">
+              <a href="{{ ud.website }}" target="_blank" rel="noopener" style="font-size:14px;font-weight:700;padding:12px 16px;border-radius:14px;color:#0E8A5F;text-decoration:none;text-align:center;border:1px solid #9EE0C2">Official website ↗</a>
+            </sc-if>
+          </section>
+        </div>
+      </div>
+      <span style="font-size:12px;color:#6E6A8A;line-height:1.5">Founded, students, type and About come from Wikipedia and Wikidata. Yearly cost, campus size, admission level and fit are sample figures for this preview.</span>
     </div>
+    </sc-if>
+
   </sc-if>
   <sc-if value="{{ isNudges }}" hint-placeholder-val="{{ false }}">
     <div class="m-page" style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:22px;max-width:1320px">
@@ -1853,6 +1978,7 @@ const CAREERS = [
     [['Now','Draws and builds','Grade 9'],['15–18','Portfolio and models','Visual Arts and Math'],['23','Junior architect','Works on real buildings'],['30','Architect','Leads projects']],
     [['Urban designer','Plans whole neighbourhoods'],['Sustainable architect','Green buildings'],['Practice founder','Own architecture firm']],['designer','energy','founder'],'A portfolio and Visual Arts']
 ].map(([id, name, path, w, day, likes, stages, branches, related, asks]) => ({ id, name, path, w, day, likes, stages, branches, related, asks }));
+const UNI_INFO = {"MIT": {"title": "Massachusetts Institute of Technology", "wiki": "https://en.wikipedia.org/wiki/Massachusetts_Institute_of_Technology", "about": "The Massachusetts Institute of Technology (MIT) is a private research university in Cambridge, Massachusetts, United States. Founded in 1861 to advance \"useful knowledge\", the university has played a significant role in the development of many areas of technology and science. William Barton Rogers founded MIT to accelerate American industrialization through scientific knowledge.", "founded": "1861", "students": 11836, "studentsYear": "2021", "website": "https://mit.edu", "kind": "Private", "img": "assets/unis/mit.jpg", "credit": {"artist": "Fcb981, this edited version by Thermos", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:MIT_Dome_night1_Edit.jpg"}, "parent": ""}, "Northeastern University": {"title": "Northeastern University", "wiki": "https://en.wikipedia.org/wiki/Northeastern_University", "about": "Northeastern University (abbreviated as NU or NEU) is a private research university with its main campus in Boston, Massachusetts, United States. It was founded by the Boston Young Men's Christian Association in 1898 as an all-male institute before being incorporated as Northeastern College in 1916, gaining university status in 1922. With more than 38,000 students, Northeastern is the largest university in Massachusetts by enrollment.", "founded": "1898", "students": 33197, "studentsYear": "2021", "website": "https://www.northeastern.edu/", "kind": "Private", "img": "assets/unis/northeastern-university.jpg", "credit": {"artist": "Edward Orde", "license": "CC BY-SA 4.0", "license_url": "https://creativecommons.org/licenses/by-sa/4.0", "page": "https://commons.wikimedia.org/wiki/File:Northeastern_University.jpg"}, "parent": ""}, "Boston University": {"title": "Boston University", "wiki": "https://en.wikipedia.org/wiki/Boston_University", "about": "Boston University (BU) is a private research university in Boston, Massachusetts, United States. BU was founded in 1839 by a group of Boston Methodists with its original campus in Newbury, Vermont. It was chartered in Boston in 1869. The university is a member of the Association of American Universities and the Boston Consortium for Higher Education. The university has nearly 38,000 students and more than 4,000 faculty members and is one of Boston's largest employers.", "founded": "1839", "students": 29338, "studentsYear": "2021", "website": "https://bu.edu/", "kind": "Private", "img": "assets/unis/boston-university.jpg", "credit": {"artist": "Fletcher6", "license": "CC BY-SA 3.0", "license_url": "https://creativecommons.org/licenses/by-sa/3.0", "page": "https://commons.wikimedia.org/wiki/File:BU_College_of_Communication.jpg"}, "parent": ""}, "Johns Hopkins University": {"title": "Johns Hopkins University", "wiki": "https://en.wikipedia.org/wiki/Johns_Hopkins_University", "about": "Johns Hopkins University (JHU), often abbreviated as Hopkins, is a private research university in Baltimore, Maryland, United States. Incorporated in 1867 and opened in 1876 based on the European research institution model, Johns Hopkins is considered to be the first research university in the U.S. The university was named for its first benefactor, the American businessman and Quaker philanthropist Johns Hopkins.", "founded": "1876", "students": 21186, "studentsYear": "2021", "website": "https://jhu.edu", "kind": "Private", "img": "assets/unis/johns-hopkins-university.jpg", "credit": {"artist": "Art Anderson", "license": "CC BY-SA 3.0", "license_url": "https://creativecommons.org/licenses/by-sa/3.0", "page": "https://commons.wikimedia.org/wiki/File:Johns_Hopkins%27_Historic_Dome_-_panoramio.jpg"}, "parent": ""}, "Worcester Polytechnic Institute": {"title": "Worcester Polytechnic Institute", "wiki": "https://en.wikipedia.org/wiki/Worcester_Polytechnic_Institute", "about": "The Worcester Polytechnic Institute (WPI) is a private research university in Worcester, Massachusetts, United States. Founded in 1865, WPI was one of the United States' first engineering and technology universities and now has 14 academic departments with over 50 bachelor's, master's, and Ph.D. degree programs. It is classified among \"R1: Doctoral Universities – Very high research activity\".", "founded": "1865", "students": 6421, "studentsYear": "2021", "website": "http://www.wpi.edu", "kind": "Private", "img": "assets/unis/worcester-polytechnic-institute.jpg", "credit": {"artist": "Nicholas LeCompte --Ojnabieoot 16:02, 30 July 2006 (UTC)", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:Wpi_boytonhall.JPG"}, "parent": ""}, "Purdue University": {"title": "Purdue University", "wiki": "https://en.wikipedia.org/wiki/Purdue_University", "about": "Purdue University is a public land-grant research university in Indiana, US, with its main campus in West Lafayette, and an urban campus in Indianapolis. The university was founded in 1869 after Lafayette businessman John Purdue donated land and money to establish a college of science, technology, and agriculture; the first classes were held on September 16, 1874.", "founded": "1869", "students": 59034, "studentsYear": "2021", "website": "https://purdue.edu", "kind": "Public", "img": "assets/unis/purdue-university.jpg", "credit": {"artist": "Abhijitsathe", "license": "CC BY 3.0", "license_url": "https://creativecommons.org/licenses/by/3.0", "page": "https://commons.wikimedia.org/wiki/File:2816_px_-_University_Hall_Purdue_University_Fall_2006.JPG"}, "parent": ""}, "University of Illinois Urbana-Champaign": {"title": "University of Illinois Urbana-Champaign", "wiki": "https://en.wikipedia.org/wiki/University_of_Illinois_Urbana-Champaign", "about": "The University of Illinois Urbana-Champaign (UIUC, U of I, Illinois, or University of Illinois) is a public land-grant research university in the Champaign–Urbana metropolitan area, Illinois, United States. Established in 1867, it is the founding campus and flagship institution of the University of Illinois System. With over 59,000 students, the University of Illinois is one of the largest public universities by enrollment in the United States.", "founded": "1867", "students": 83119, "studentsYear": "2021", "website": "https://illinois.edu", "kind": "Public", "img": "assets/unis/university-of-illinois-urbana-champaign.jpg", "credit": {"artist": "Daniel Schwen", "license": "CC BY-SA 4.0", "license_url": "https://creativecommons.org/licenses/by-sa/4.0", "page": "https://commons.wikimedia.org/wiki/File:UIUC_Illini_Union_and_Main_Quad.jpg"}, "parent": ""}, "Case Western Reserve University": {"title": "Case Western Reserve University", "wiki": "https://en.wikipedia.org/wiki/Case_Western_Reserve_University", "about": "Case Western Reserve University (CWRU) is a private research university in Cleveland, Ohio, United States. It was federated in 1967 by a merger between Western Reserve University, founded in 1826 by the Presbyterian Church, and the Case Institute of Technology, founded in 1880. In 2026, the university enrolled 12,145 students (6,590 undergraduates and 5,555 graduate and professional students) from all 50 U.S. states and 106 countries, and employed more than 1,188 full-time faculty members.", "founded": "1826", "students": 11465, "studentsYear": "2021", "website": "https://case.edu", "kind": "Private", "img": "assets/unis/case-western-reserve-university.jpg", "credit": {"artist": "Rdikeman at English Wikipedia", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:Case_western_reserve_campus_2005.jpg"}, "parent": ""}, "Indiana University Bloomington": {"title": "Indiana University Bloomington", "wiki": "https://en.wikipedia.org/wiki/Indiana_University_Bloomington", "about": "Indiana University Bloomington (IU Bloomington, Indiana University, IU, IUB, or Indiana) is a public research university in Bloomington, Indiana, United States. It is the flagship campus of Indiana University and is its largest campus, with over 48,000 students. Established as the state's seminary in 1820, the name was changed to \"Indiana College\" in 1829 and to \"Indiana University\" in 1838.", "founded": "1820", "students": 43064, "studentsYear": "2020", "website": "https://bloomington.iu.edu", "kind": "Public", "img": "assets/unis/indiana-university-bloomington.jpg", "credit": {"artist": "Unknown author", "license": "CC BY-SA 2.5", "license_url": "https://creativecommons.org/licenses/by-sa/2.5", "page": "https://commons.wikimedia.org/wiki/File:IUB-Showalter_Fountain.jpg"}, "parent": ""}, "Georgia Institute of Technology": {"title": "Georgia Tech", "wiki": "https://en.wikipedia.org/wiki/Georgia_Tech", "about": "The Georgia Institute of Technology (commonly referred to as Georgia Tech, GT, and simply Tech or the Institute) is a public research university and institute of technology in Atlanta, Georgia, United States. Established in 1885, it has the largest student enrollment of the University System of Georgia, with satellite campuses in Savannah, Georgia, and Metz, France.", "founded": "1885", "students": 29677, "studentsYear": "2021", "website": "https://gatech.edu", "kind": "Public", "img": "assets/unis/georgia-institute-of-technology.jpg", "credit": {"artist": "User:TheCustomOfLife", "license": "Public domain", "license_url": "", "page": "https://commons.wikimedia.org/wiki/File:Georgiatechsign2.jpg"}, "parent": ""}, "UT Austin": {"title": "University of Texas at Austin", "wiki": "https://en.wikipedia.org/wiki/University_of_Texas_at_Austin", "about": "The University of Texas at Austin (UT Austin, UT, or Texas) is a public research university in Austin, Texas, United States. Founded in 1883, it is the flagship institution of the University of Texas System. With 53,864 students as of fall 2024, it is also the largest institution in the system. The university is a major center for academic research, with research expenditures totaling $1.06 billion for the 2023 fiscal year. It joined the Association of American Universities in 1929.", "founded": "1883", "students": 40804, "studentsYear": "2018", "website": "https://www.utexas.edu/", "kind": "Public", "img": "assets/unis/ut-austin.jpg", "credit": {"artist": "Kurt Kaiser", "license": "CC0", "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en", "page": "https://commons.wikimedia.org/wiki/File:University_of_Texas_Main_Building_Tower_3.jpg"}, "parent": ""}, "Rice University": {"title": "Rice University", "wiki": "https://en.wikipedia.org/wiki/Rice_University", "about": "William Marsh Rice University, also known as Rice University, is a private research university in Houston, Texas, United States. Established in 1912, it spans 300 acres. The university consists of eight constituent schools in the fields of architecture, business, continuing studies, engineering, humanities, music, natural sciences, and social sciences. Established in 1912 as William M.", "founded": "1912", "students": 7956, "studentsYear": "2021", "website": "https://rice.edu", "kind": "Private", "img": "assets/unis/rice-university.jpg", "credit": {"artist": "Daderot", "license": "Public domain", "license_url": "", "page": "https://commons.wikimedia.org/wiki/File:Rice_University_-_Sally_Port.JPG"}, "parent": ""}, "UC San Diego": {"title": "University of California, San Diego", "wiki": "https://en.wikipedia.org/wiki/University_of_California,_San_Diego", "about": "The University of California, San Diego (UC San Diego or UCSD) is a public land-grant research university in the La Jolla neighborhood of San Diego, California, United States. Established in 1960, it is the southernmost of the ten campuses of the University of California. It occupies 2,178 acres (881 ha) near the Pacific coast. UC San Diego consists of 12 schools and has 8 undergraduate residential colleges. It is classified among \"R1: Doctoral Universities – Very high research activity\".", "founded": "1960", "students": 40426, "studentsYear": "2021", "website": "https://ucsd.edu", "kind": "Public", "img": "assets/unis/uc-san-diego.jpg", "credit": {"artist": "Alex Hansen", "license": "CC BY 2.0", "license_url": "https://creativecommons.org/licenses/by/2.0", "page": "https://commons.wikimedia.org/wiki/File:Price_Center,_UCSD.jpg"}, "parent": ""}, "Cal Poly San Luis Obispo": {"title": "California Polytechnic State University, San Luis Obispo", "wiki": "https://en.wikipedia.org/wiki/California_Polytechnic_State_University,_San_Luis_Obispo", "about": "California Polytechnic State University, San Luis Obispo (Cal Poly) is a public university in San Luis Obispo County, California, United States, outside of the city limits of San Luis Obispo. Founded in 1901, it is the oldest of three polytechnic universities within the California State University system. Cal Poly emphasizes a \"learn by doing\" philosophy, integrating hands-on, practical experiences into its curriculum. As of fall 2025, Cal Poly had approximately 22,000 undergraduate and 900 graduate students.", "founded": "1901", "students": 21089, "studentsYear": "2021", "website": "https://www.calpoly.edu/", "kind": "Public", "img": "assets/unis/cal-poly-san-luis-obispo.jpg", "credit": {"artist": "Gregg Erickson (Farwestern)", "license": "Public domain", "license_url": "", "page": "https://commons.wikimedia.org/wiki/File:Cal-Poly-from-outback.jpg"}, "parent": ""}, "University of Southern California": {"title": "University of Southern California", "wiki": "https://en.wikipedia.org/wiki/University_of_Southern_California", "about": "The University of Southern California (USC, SC, or Southern Cal[a]) is a private research university in Los Angeles, California, United States. Founded in 1880 by Robert M. Widney, it is the oldest private research university in California and has an enrollment of more than 47,000 students.", "founded": "1880", "students": 48500, "studentsYear": "2019", "website": "https://usc.edu", "kind": "Private", "img": "assets/unis/university-of-southern-california.jpg", "credit": {"artist": "Bobak Ha'Eri", "license": "CC BY 3.0", "license_url": "https://creativecommons.org/licenses/by/3.0", "page": "https://commons.wikimedia.org/wiki/File:052607-016-BovardHall-USC.jpg"}, "parent": ""}, "Texas A&M University at Qatar": {"title": "Texas A&M University at Qatar", "wiki": "https://en.wikipedia.org/wiki/Texas_A%26M_University_at_Qatar", "about": "Texas A&M University at Qatar (TAMUQ) is a branch of Texas A&M University located in Education City, Al Rayyan, Qatar. The university was established in 2003, and is slated to close by 2028. The university offers undergraduate degrees in chemical, electrical, mechanical, and petroleum engineering. A graduate program for chemical engineering (master's degree) commenced in 2011.", "founded": "2003", "students": 300, "studentsYear": "", "website": "http://www.qatar.tamu.edu/", "kind": "Public", "img": "assets/unis/texas-a-m-university-at-qatar.jpg", "credit": {"artist": "Alex Sergeev (www.asergeev.com)", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:Rear_of_Texas_A%26M_University_in_Qatar.jpg"}, "parent": "Texas A&M University"}, "Carnegie Mellon University in Qatar": {"title": "Carnegie Mellon University in Qatar", "wiki": "https://en.wikipedia.org/wiki/Carnegie_Mellon_University_in_Qatar", "about": "Carnegie Mellon University in Qatar (Arabic: جامعة كارنيجي ميلون في قطر) is a satellite campus of Carnegie Mellon University in Education City, Doha, Qatar. This campus is a member of the Qatar Foundation and started graduating students in May 2008. It enrolls over 400 students, has 60 faculty and postdoctoral researchers, and 90 staff members.", "founded": "2004", "students": null, "studentsYear": "", "website": "http://www.qatar.cmu.edu", "kind": "Private", "img": "assets/unis/carnegie-mellon-university-in-qatar.jpg", "credit": {"artist": "Alex Sergeev (www.asergeev.com)", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:Steps_in_Carnegie_Mellon_University_campus_in_Qatar.jpg"}, "parent": "Carnegie Mellon University"}, "Weill Cornell Medicine-Qatar": {"title": "Weill Cornell Medicine - Qatar", "wiki": "https://en.wikipedia.org/wiki/Weill_Cornell_Medicine_-_Qatar", "about": "Weill Cornell Medicine-Qatar (WCM-Q) is a branch of Cornell University's Weill Cornell Medicine, established on April 9, 2001, following an agreement between Cornell University and the Qatar Foundation for Education, Science and Community Development. It is located in Education City, Qatar, near Doha, the capital of Qatar. WCM-Q offers undergraduate and graduate-entry medical programmes leading to a Doctor of Medicine degree awarded by Cornell University.", "founded": "2001", "students": null, "studentsYear": "", "website": "http://qatar-weill.cornell.edu", "kind": "Private", "img": "assets/unis/weill-cornell-medicine-qatar.jpg", "credit": {"artist": "Alex Sergeev (www.asergeev.com)", "license": "CC BY-SA 3.0", "license_url": "http://creativecommons.org/licenses/by-sa/3.0/", "page": "https://commons.wikimedia.org/wiki/File:Egg_shaped_structures_at_Weill_Cornell_Medical_College_in_Qatar.jpg"}, "parent": "Cornell University"}, "Georgetown University in Qatar": {"title": "Georgetown University in Qatar", "wiki": "https://en.wikipedia.org/wiki/Georgetown_University_in_Qatar", "about": "Georgetown University in Qatar (GU-Q) is a campus of Georgetown University (Washington, D.C.) in Education City, Doha, Qatar. It is one of Georgetown University's eleven undergraduate and graduate schools, and is supported by a partnership between Qatar Foundation and Georgetown University. In 2015, the university broadened its remit to include executive and professional education and custom training programs, in addition to the primary Bachelor of Science in Foreign Service degree.", "founded": "2005", "students": null, "studentsYear": "", "website": "https://www.qatar.georgetown.edu/", "kind": "Private", "img": "assets/unis/georgetown-university-in-qatar.jpg", "credit": {"artist": "Julie Lindsay", "license": "CC BY 2.0", "license_url": "https://creativecommons.org/licenses/by/2.0", "page": "https://commons.wikimedia.org/wiki/File:LAS_Building_at_Education_City.jpg"}, "parent": "Georgetown University"}, "VCUarts Qatar": {"title": "Virginia Commonwealth University School of the Arts in Qatar", "wiki": "https://en.wikipedia.org/wiki/Virginia_Commonwealth_University_School_of_the_Arts_in_Qatar", "about": "The Virginia Commonwealth University School of the Arts in Qatar (VCUarts Qatar) is the Qatari Education City campus of the School of the Arts of Virginia Commonwealth University, a public university in Richmond, Virginia, United States. VCUarts Qatar is accredited by the United States National Association of Schools of Art and Design, the Southern Association of Colleges and Schools, and the Council for Interior Design Accreditation.", "founded": "1998", "students": null, "studentsYear": "", "website": "http://www.qatar.vcu.edu/", "kind": "Public", "img": "assets/unis/vcuarts-qatar.jpg", "credit": {"artist": "Fredericknoronha", "license": "CC BY-SA 4.0", "license_url": "https://creativecommons.org/licenses/by-sa/4.0", "page": "https://commons.wikimedia.org/wiki/File:Foreign_universities_in_Doha,_Qatar,_including_VCU_84.jpg"}, "parent": "Virginia Commonwealth University"}};
 const CMAJOR = { robotics: ['Robotics or Mechanical Engineering', 'Engineering schools with strong labs, makerspaces and co-op'], aero: ['Aerospace Engineering', 'Large engineering schools with research labs'], meddev: ['Biomedical Engineering', 'Research universities with a medical school nearby'], energy: ['Mechanical or Electrical Engineering', 'Universities with sustainability and energy programs'], software: ['Computer Science', 'Universities with strong CS and internships'], ai: ['Computer Science, AI track', 'Research universities with AI labs'], games: ['Game Design or Computer Science', 'Universities with media and CS programs'], doctor: ['Pre-med (Biology) or a 6-year medical program', 'Pre-med colleges or direct medical programs'], neuro: ['Neuroscience', 'Research universities'], health: ['Public Health', 'Universities with health policy programs'], founder: ['Business or Engineering', 'Universities with entrepreneurship hubs'], designer: ['Product or Industrial Design', 'Art and design schools'], civil: ['Architecture', 'Universities with architecture schools'] };
 const STYLE_FILTERS = ['Project-based','Co-op','Research from year 1','Small classes','Makerspace','Flexible first year','Clinical exposure','Studio-based'];
 
@@ -2380,38 +2506,73 @@ class Component extends DCLogic {
       uniToggle: () => this.setState({ uniOpen: !uniOpen, selNode: null }), uniClose: () => this.setState({ uniOpen: false }), uniExplore: () => this.setState({ tab: 'uniex', uniOpen: false, xField: selC.path, xView: 'explore' }),
       uniBtnLabel: 'Universities · ' + uniRows.length, uniBtnBg: uniOpen ? '#DDF7EA' : '#FFFFFF', hasUniShort: nShort > 0, uniShort: nShort + ' shortlisted',
       uniNote: (a3.p5 == null ? 'Using a general budget and all regions until the parent assessment is done. ' : 'Using your budget and regions from the parent assessment. ') + 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance.' });
-    // University explorer: explore and compare (side menu "Universities").
-    const xf = this.state.xField || 'all', xr = this.state.xRegion || 'all', xb = !!this.state.xBudget, xv = this.state.xView || 'explore', xShort = this.state.shortlist || {};
-    const xSel = ['', 'Open admission', 'Moderately selective', 'Selective', 'Very selective', 'Most selective'], xSize = { S: 'Small campus', M: 'Medium campus', L: 'Large campus' };
+    // University explorer: filter sidebar, cards, detail page and compare (side menu "Universities").
+    const xs = this.state, xShort = xs.shortlist || {}, xv = xs.xView || 'explore', xSort = xs.xSort || 'fit', xq = (xs.xQ || '').trim().toLowerCase();
+    const xF = { field: xs.xField || 'all', region: xs.xRegion || 'all', cost: xs.xCost || 'all', fit: xs.xFit || 'all', size: xs.xSize || 'all', sel: xs.xSel || 'all', type: xs.xType || 'all' };
+    const xSelTxt = ['', 'Open admission', 'Moderately selective', 'Selective', 'Very selective', 'Most selective'], xSizeTxt = { S: 'Small campus', M: 'Medium campus', L: 'Large campus' };
     const xLever = { project: 'an independent project', math: 'a 7 in math', lead: 'a leadership role', sat: 'an SAT score of 1450+' };
-    const xNeeds = (gap) => { if (gap >= 0) return 'Omar’s profile already matches typical students here.'; const st = WHATIFS.filter(w => w[2] >= -gap).sort((a, b) => a[2] - b[2])[0]; return st ? 'Would fit better with ' + xLever[st[0]] + '.' : 'Needs several planned steps first.'; };
+    const xNeeds = (gap) => { if (gap >= 0) return 'Omar’s profile already looks like typical students here. Keep the plan on track.'; const st = WHATIFS.filter(w => w[2] >= -gap).sort((a, b) => a[2] - b[2])[0]; return st ? 'It would fit better with ' + xLever[st[0]] + '. That is already a step in Omar’s plan.' : 'This needs several planned steps first. Treat it as a reach for now.'; };
+    const xFitTitle = { Strong: 'A strong fit today', Good: 'A good fit today', Stretch: 'A stretch for now', Reach: 'A reach for now' };
+    const xSet = (k, v) => () => this.setState({ [k]: v });
     const xToggle = (name) => () => this.setState(s => ({ shortlist: { ...(s.shortlist || {}), [name]: !(s.shortlist || {})[name] } }));
+    const xOpen = (name) => () => { this.setState({ xDetail: name }); window.scrollTo(0, 0); };
     const xRank = { Strong: 0, Good: 1, Stretch: 2, Reach: 3 };
-    const xAll = UNIS.map(u => { const gap = BASE - (40 + u.sel * 9), fit = fitOf(gap), over = u.cost > lvU.budget, on = !!xShort[u.name];
-      return { name: u.name, place: u.city + ' · ' + (u.region === 'Qatar' ? 'Qatar' : 'US ' + u.region), cost: this.m(u.cost) + '/yr', costN: u.cost, over, overText: over ? 'Over budget' : 'Within budget', overColor: over ? '#E8336D' : '#0E8A5F',
-        fit, rank: xRank[fit], fg: FIT[fit][0], bg: FIT[fit][1], size: xSize[u.size], sel: xSel[u.sel], fields: u.paths.map(pathName).join(', '), paths: u.paths, needs: xNeeds(gap),
-        on, border: on ? '#B7A9FF' : '#E7E3F5', saveLabel: on ? '★ Shortlisted' : '☆ Shortlist', saveBg: on ? '#E6E1FF' : '#FFFFFF', toggle: xToggle(u.name) }; })
-      .sort((a, b) => (a.over - b.over) || (a.rank - b.rank) || (a.costN - b.costN));
-    const xRows = xAll.filter(u => (xf === 'all' || u.paths.includes(xf)) && (xr === 'all' || u.region === xr) && (!xb || !u.over));
-    const xChip = (on, go) => ({ bg: on ? '#16123A' : '#FFFFFF', color: on ? '#FFFFFF' : '#16123A', border: on ? '#16123A' : '#E7E3F5', go });
+    const xAll = UNIS.map(u => { const info = UNI_INFO[u.name] || {}, gap = BASE - (40 + u.sel * 9), fit = fitOf(gap), over = u.cost > lvU.budget, on = !!xShort[u.name];
+      return { name: u.name, info, place: u.city + ' · ' + (u.region === 'Qatar' ? 'Qatar' : 'US ' + u.region), region: u.region, cost: this.m(u.cost) + '/yr', costN: u.cost, over, overText: over ? 'Over budget' : 'Within budget', overColor: over ? '#E8336D' : '#0E8A5F',
+        fit, rank: xRank[fit], fg: FIT[fit][0], bg: FIT[fit][1], sizeKey: u.size, size: xSizeTxt[u.size], selN: u.sel, sel: xSelTxt[u.sel], kind: info.kind || 'University', paths: u.paths, fields: u.paths.map(pathName).join(', '),
+        students: info.students || 0, needs: xNeeds(gap), img: info.img || '', on, border: on ? '#B7A9FF' : '#E7E3F5', saveLabel: on ? '★ Shortlisted' : '☆ Shortlist', saveBg: on ? '#E6E1FF' : '#FFFFFF', toggle: xToggle(u.name), open: xOpen(u.name) }; });
+    const xCostOk = (u) => xF.cost === 'all' || (xF.cost === 'low' ? u.costN < 50000 : xF.cost === 'mid' ? u.costN >= 50000 && u.costN <= 75000 : u.costN > 75000);
+    const xSelOk = (u) => xF.sel === 'all' || (xF.sel === 'low' ? u.selN <= 2 : xF.sel === 'mid' ? u.selN === 3 : u.selN >= 4);
+    const xRows = xAll.filter(u => (xF.field === 'all' || u.paths.includes(xF.field)) && (xF.region === 'all' || u.region === xF.region) && xCostOk(u) && (xF.fit === 'all' || u.fit === xF.fit)
+      && (xF.size === 'all' || u.sizeKey === xF.size) && xSelOk(u) && (xF.type === 'all' || u.kind === xF.type) && (!xs.xBudget || !u.over) && (!xs.xShortOnly || u.on) && (!xq || (u.name + ' ' + u.place).toLowerCase().includes(xq)))
+      .sort((a, b) => xSort === 'cost' ? a.costN - b.costN : xSort === 'size' ? b.students - a.students : xSort === 'name' ? a.name.localeCompare(b.name) : (a.over - b.over) || (a.rank - b.rank) || (a.costN - b.costN));
+    const xChips = (key, opts) => opts.map(([id, label]) => { const on = (xs[key] || 'all') === id; return { label, bg: on ? '#16123A' : '#FFFFFF', color: on ? '#FFFFFF' : '#16123A', border: on ? '#16123A' : '#E7E3F5', go: xSet(key, id) }; });
+    const xActiveN = Object.values(xF).filter(v => v !== 'all').length + (xs.xBudget ? 1 : 0) + (xs.xShortOnly ? 1 : 0) + (xq ? 1 : 0);
     const xShortAll = xAll.filter(u => u.on), xCmp = xShortAll.slice(0, 4), xN = xCmp.length;
     const xCell = (u, key) => ({ v: u[key], color: key === 'fit' ? u.fg : key === 'overText' ? u.overColor : '#16123A', weight: key === 'fit' || key === 'cost' ? 700 : 500 });
+    const xDet = xAll.find(u => u.name === xs.xDetail);
+    const xTick = (on) => ({ box: on ? '#5B3DF5' : '#C9C2EC', fill: on ? '#5B3DF5' : '#FFFFFF', tick: on ? '✓' : '' });
+    const xB = xTick(!!xs.xBudget), xSh = xTick(!!xs.xShortOnly);
+    const xDetail = xDet ? (() => { const i = xDet.info, cr = i.credit || {};
+      return { name: xDet.name, place: xDet.place, img: xDet.img, fit: xDet.fit, fg: xDet.fg, bg: xDet.bg, saveLabel: xDet.saveLabel, saveBg: xDet.on ? '#E6E1FF' : '#FFFFFF', toggle: xDet.toggle,
+        credit: (cr.artist || 'Unknown author') + ', ' + (cr.license || 'see source'), creditUrl: cr.page || 'https://commons.wikimedia.org', about: i.about || '', wiki: i.wiki || 'https://en.wikipedia.org', website: i.website || '', hasSite: !!i.website,
+        facts: [['Founded', i.founded || '—', ''], ['Students', i.students ? i.students.toLocaleString('en-US') : '—', i.studentsYear ? 'as of ' + i.studentsYear : ''], ['Type', xDet.kind, i.parent ? 'Branch of ' + i.parent : ''],
+          ['Yearly cost', xDet.cost.replace('/yr', ''), 'sample figure'], ['Your budget', xDet.overText, 'up to ' + this.m(lvU.budget) + ' a year'], ['Campus', xDet.size.replace(' campus', ''), ''], ['Admission', xDet.sel, '']]
+          .map(([label, value, sub]) => ({ label, value, sub, color: label === 'Your budget' ? xDet.overColor : '#16123A' })),
+        fields: xDet.paths.map(p => ({ name: pathName(p), bg: PCOL[p] + '1F', fg: PCOL[p] })),
+        careers: CAREERS.filter(c => xDet.paths.includes(c.path)).slice(0, 6).map(c => ({ name: c.name, go: () => { this.setState({ tab: 'unis', career: c.id, selNode: null, xDetail: null }); window.scrollTo(0, 0); } })),
+        fitTitle: xFitTitle[xDet.fit], needs: xDet.needs,
+        goPlan: () => { this.setState({ tab: 'goals', xDetail: null }); window.scrollTo(0, 0); },
+        compare: () => { this.setState(s => ({ shortlist: { ...(s.shortlist || {}), [xDet.name]: true }, xView: 'compare', xDetail: null })); window.scrollTo(0, 0); },
+        ask: () => { this.setState({ tab: 'explore', xDetail: null }); this.send('Is ' + xDet.name + ' a good option for Omar?'); } }; })() : {};
     const uniX = {
+      isList: !xDet, isDetail: !!xDet, back: () => this.setState({ xDetail: null }),
       total: UNIS.length, rows: xRows, none: xRows.length === 0, countLabel: xRows.length + (xRows.length === 1 ? ' university' : ' universities'),
-      fields: [['all', 'All fields'], ...PATHS].map(([id, label]) => ({ label, ...xChip(xf === id, () => this.setState({ xField: id })) })),
-      regions: [['all', 'Everywhere'], ...REGIONS.map(r => [r, r === 'Qatar' ? 'Qatar' : 'US · ' + r])].map(([id, label]) => ({ label, ...xChip(xr === id, () => this.setState({ xRegion: id })) })),
-      toggleBudget: () => this.setState({ xBudget: !xb }), budgetLabel: xb ? '✓ Within budget only' : 'Within budget only', budgetBg: xb ? '#DDF7EA' : '#FFFFFF', budgetColor: xb ? '#0E8A5F' : '#16123A', budgetBorder: xb ? '#9EE0C2' : '#E7E3F5',
-      budgetNote: 'Budget: up to ' + this.m(lvU.budget) + ' a year' + (a3.p5 == null ? ' (a general figure until the parent assessment is done)' : ' (from the parent assessment)'),
+      q: xs.xQ || '', onQ: (e) => this.setState({ xQ: e.target.value }),
+      fields: xChips('xField', [['all', 'All'], ...PATHS]),
+      regions: xChips('xRegion', [['all', 'Everywhere'], ['Qatar', 'Qatar'], ...REGIONS.filter(r => r !== 'Qatar').map(r => [r, 'US · ' + r])]),
+      costs: xChips('xCost', [['all', 'Any'], ['low', 'Under ' + this.m(50000)], ['mid', this.m(50000) + '–' + this.m(75000).replace(/^[$A-Z ]+/, '')], ['high', 'Over ' + this.m(75000)]]),
+      fits: xChips('xFit', [['all', 'Any'], ['Strong', 'Strong'], ['Good', 'Good'], ['Stretch', 'Stretch'], ['Reach', 'Reach']]),
+      sizes: xChips('xSize', [['all', 'Any'], ['S', 'Small'], ['M', 'Medium'], ['L', 'Large']]),
+      sels: xChips('xSel', [['all', 'Any'], ['low', 'Less selective'], ['mid', 'Selective'], ['high', 'Very selective']]),
+      types: xChips('xType', [['all', 'Any'], ['Public', 'Public'], ['Private', 'Private']]),
+      sorts: xChips('xSort', [['fit', 'Best fit'], ['cost', 'Lowest cost'], ['size', 'Most students'], ['name', 'A–Z']]).map((c, i) => i === 0 && !xs.xSort ? { ...c, bg: '#16123A', color: '#FFFFFF', border: '#16123A' } : c),
+      toggleBudget: () => this.setState({ xBudget: !xs.xBudget }), budgetBox: xB.box, budgetFill: xB.fill, budgetTick: xB.tick,
+      toggleShortOnly: () => this.setState({ xShortOnly: !xs.xShortOnly }), shortBox: xSh.box, shortFill: xSh.fill, shortTick: xSh.tick,
+      budgetNote: 'Your budget: up to ' + this.m(lvU.budget) + ' a year' + (a3.p5 == null ? ', a general figure until the parent assessment is done.' : ', from the parent assessment.'),
+      hasActive: xActiveN > 0, activeN: xActiveN,
+      reset: () => this.setState({ xField: 'all', xRegion: 'all', xCost: 'all', xFit: 'all', xSize: 'all', xSel: 'all', xType: 'all', xBudget: false, xShortOnly: false, xQ: '' }),
+      filtersOpen: xs.xFiltersOpen ? 'yes' : 'no', toggleFilters: () => this.setState({ xFiltersOpen: !xs.xFiltersOpen }), filtersLabel: xs.xFiltersOpen ? 'Hide filters' : 'Show filters' + (xActiveN ? ' · ' + xActiveN : ''),
       views: [['explore', 'Explore'], ['compare', 'Compare' + (xShortAll.length ? ' · ' + xShortAll.length : '')]].map(([id, label]) => ({ label, go: () => this.setState({ xView: id }), bg: xv === id ? '#16123A' : 'transparent', color: xv === id ? '#FFFFFF' : '#16123A' })),
       isExplore: xv === 'explore', isCompare: xv === 'compare', goExplore: () => this.setState({ xView: 'explore' }),
       cmpFew: xN < 2, canCompare: xN >= 2, cmpN: xN,
       cmpHint: xN === 1 ? 'You have shortlisted 1 university. Shortlist one more to compare them side by side.' : 'Shortlist 2 to 4 universities in Explore, or start with Omar’s three best matches.',
-      quickPick: () => this.setState(s => { const sl = { ...(s.shortlist || {}) }; xAll.filter(u => !u.over).slice(0, 3).forEach(u => { sl[u.name] = true; }); return { shortlist: sl, xView: 'compare' }; }),
+      quickPick: () => this.setState(s => { const sl = { ...(s.shortlist || {}) }; xAll.filter(u => !u.over).sort((a, b) => a.rank - b.rank).slice(0, 3).forEach(u => { sl[u.name] = true; }); return { shortlist: sl, xView: 'compare' }; }),
       cmpTitle: xShortAll.length > 4 ? 'Comparing the first 4 of ' + xShortAll.length + ' shortlisted. Remove one to bring in the next.' : 'Comparing ' + xN + ' shortlisted universities.',
-      cmpGrid: '170px repeat(' + xN + ', minmax(190px, 1fr))', cmpMin: (170 + 190 * xN) + 'px',
-      cmpCols: xCmp.map(u => ({ name: u.name, place: u.place, toggle: u.toggle })),
-      cmpRows: [['Fit for Omar', 'fit'], ['Yearly cost', 'cost'], ['Budget', 'overText'], ['Location', 'place'], ['Campus', 'size'], ['Admission', 'sel'], ['Fields', 'fields'], ['What Omar needs', 'needs']].map(([label, key]) => ({ label, cells: xCmp.map(u => xCell(u, key)) })),
-      note: 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance. Universities, costs and selectivity are sample data for this preview.'
+      cmpGrid: '170px repeat(' + xN + ', minmax(200px, 1fr))', cmpMin: (170 + 200 * xN) + 'px',
+      cmpCols: xCmp.map(u => ({ name: u.name, place: u.place, img: u.img, toggle: u.toggle, open: u.open })),
+      cmpRows: [['Fit for Omar', 'fit'], ['Yearly cost', 'cost'], ['Budget', 'overText'], ['Type', 'kind'], ['Location', 'place'], ['Campus', 'size'], ['Admission', 'sel'], ['Fields', 'fields'], ['What Omar needs', 'needs']].map(([label, key]) => ({ label, cells: xCmp.map(u => xCell(u, key)) })),
+      note: 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance. Costs, campus sizes and admission levels are sample figures; photos from Wikimedia Commons, credited on each university’s page.'
     };
     return {
       aViews: [['compare','Compare'],['map','Path'],['unis','Universities'],['profile','Profile'],['milestones','Milestones']].map(([id, label]) => { const on = aV === id; return { label, go: () => this.setState({ aView: id }), bg: on ? '#5B3DF5' : 'transparent', color: on ? '#FFFFFF' : '#16123A' }; }),
@@ -2441,7 +2602,7 @@ class Component extends DCLogic {
       isProfiler: tab === 'profiler', pf, pfMeters, pfTraits, pfInterests, pfQuick, pfLog, pfAsk: () => { this.setState({ tab: 'explore' }); this.send('Here’s what changed for Omar this term'); },
       rmGroups: rmMode === 'area' ? rmByArea : rmGroupsS, rmModes, rmTimeline, rmIsTimeline: rmMode === 'timeline', rmIsList: rmMode !== 'timeline', rmGroupOpts, rmSummary, rmChart, rmAreas, rmNext, hasMs: !!md, md: md || {}, closeMs: () => this.setState({ selMs: null }),
       rm: { goal: gc.name, tint: PCOL[gc.path] + '22', color: PCOL[gc.path], mask: LU(CICON[gc.id]), stats: [[now, 'development now', '#16123A'], [finalProj, 'by Jan 2030', '#5B3DF5'], [target, 'target', '#E8336D']].map(([n, label, color]) => ({ n, label, color })) },
-      careerCards: progsV, g: graph, x: uniX, isUniEx: tab === 'uniex', hasDrawer: !!drawer, d: drawer || {}, closeDrawer: () => this.setState({ selNode: null }), careerHeading: progsV.length + ' careers for a ' + PERSONAS[pType][0].toLowerCase(), personaTiles, pathPills, hasSavedProgs: savedM.length > 0,
+      careerCards: progsV, g: graph, x: uniX, ud: xDetail, isUniEx: tab === 'uniex', hasDrawer: !!drawer, d: drawer || {}, closeDrawer: () => this.setState({ selNode: null }), careerHeading: progsV.length + ' careers for a ' + PERSONAS[pType][0].toLowerCase(), personaTiles, pathPills, hasSavedProgs: savedM.length > 0,
       
       hero: { bgImg: pm[1] + ' url(' + AV(pm[2], pm[1]) + ') center/cover no-repeat', tint: pm[1] + '40', name: PERSONAS[pType][0], desc: PERSONAS[pType][1] + '. ' + (this.state.trial ? 'See how the matches shift below.' : 'Built from the chat' + (fromAssess ? ' and the assessment.' : '. Take the assessment to sharpen it.')), kicker: this.state.trial ? 'Trying a different persona' : 'Omar is a' },
       heroTraits: [{ label: STYLES[pStyle][0], mask: LU(SICON[pStyle]), c: '#16123A' }, { label: 'Leaning ' + pathName(lv.pathway).toLowerCase(), mask: LU(PICON[lv.pathway]), c: PCOL[lv.pathway] }],
