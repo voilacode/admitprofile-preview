@@ -2703,7 +2703,7 @@ class Component extends DCLogic {
     const xB = xTick(!!xs.xBudget), xSh = xTick(!!xs.xShortOnly);
     const xDetail = xDet ? (() => {
       const i = xDet.info, cr = i.credit || {}, sc = i.scorecard, c = i.climate || DOHA_CLIM, su = xDet.suit, near = (i.kmFromDoha || 0) < 60;
-      const pct = (v) => Math.round(v * 100), money = (v) => '$' + Math.round(v / 1000) + 'k';
+      const pct = (v) => Math.round(v * 100), money = (v) => this.m(v);  // the app's currency (USD or QAR)
       const minLo = Math.round(Math.min(...c.lo)), maxHi = Math.round(Math.max(...c.hi)), dohaHi = Math.round(Math.max(...DOHA_CLIM.hi));
       const behind = 3 - (c.utcOffset || 3);
       const climateShort = near ? 'Same as home' : c.snowDays >= 5 ? 'Cold, snowy winters' : minLo < 6 ? 'Cool winters' : 'Mild all year';
