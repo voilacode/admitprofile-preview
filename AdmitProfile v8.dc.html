@@ -23,18 +23,21 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   .m-hide { display: none !important; }
   .m-nav { flex-direction: row !important; gap: 0 !important; flex: 5 1 0 !important; min-width: 0 !important; }
   .m-nav::-webkit-scrollbar { display: none; }
-  .m-tab { flex: 1 1 0 !important; min-width: 0 !important; flex-direction: column !important; justify-content: center !important; gap: 3px !important; padding: 6px 1px !important; border: 0 !important; border-radius: 12px !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: -.01em; }
+  .m-tab { flex: 1 1 auto !important; min-width: 36px !important; flex-direction: column !important; justify-content: center !important; gap: 3px !important; padding: 6px 2px !important; border: 0 !important; border-radius: 12px !important; font-size: 10px !important; font-weight: 600 !important; letter-spacing: -.01em; }
+  .m-ask { flex: 0 0 42px !important; }
+  .m-tab[title="Milestones"], .m-tab[title="Talk to a counsellor"] { flex-shrink: 0 !important; }
   .m-tab > svg, .m-tab > span:first-child { width: 20px !important; height: 20px !important; flex: 0 0 20px !important; }
   .m-tab > span:last-child { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* Short labels: the desktop ones ("Ask the assistant", "Talk to a counsellor") do not fit */
+  /* Short labels, keyed on each tab's title so adding a tab never shifts them */
   .m-tab > span:last-child { font-size: 0 !important; }
   .m-tab > span:last-child::after { font-size: 9.5px; }
-  .m-ask > span:last-child::after { content: 'Ask'; }
-  .m-nav > .m-tab:nth-of-type(1) > span:last-child::after { content: 'Profile'; }
-  .m-nav > .m-tab:nth-of-type(2) > span:last-child::after { content: 'Careers'; }
-  .m-nav > .m-tab:nth-of-type(3) > span:last-child::after { content: 'Milestones'; }
-  .m-nav > .m-tab:nth-of-type(4) > span:last-child::after { content: 'Counsellor'; }
-  .m-nav > .m-tab:nth-of-type(5) > span:last-child::after { content: 'Admin'; }
+  .m-tab[title="Ask the assistant"] > span:last-child::after { content: 'Ask'; }
+  .m-tab[title="Profiler"] > span:last-child::after { content: 'Profile'; }
+  .m-tab[title="Career map"] > span:last-child::after { content: 'Careers'; }
+  .m-tab[title="Universities"] > span:last-child::after { content: 'Unis'; }
+  .m-tab[title="Milestones"] > span:last-child::after { content: 'Milestones'; }
+  .m-tab[title="Talk to a counsellor"] > span:last-child::after { content: 'Counsellor'; }
+  .m-tab[title="Admin"] > span:last-child::after { content: 'Admin'; }
   .m-foot { margin: 0 !important; flex: 0 0 auto !important; }
   .m-prof { width: auto !important; padding: 6px !important; }
   .m-prof > :not(:first-child) { display: none !important; }
@@ -109,6 +112,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
   /* Universities that fit (unis_patch.py): the drawer becomes a full-screen sheet */
   .m-unisheet { position: fixed !important; inset: 0 0 calc(64px + env(safe-area-inset-bottom)) 0 !important; width: auto !important; border-radius: 0 !important; border: 0 !important; z-index: 35 !important; }
   .m-unibtn { margin-left: 0 !important; padding: 11px 16px !important; }
+  /* University explorer (explorer_patch.py): narrower compare columns, label column stays put */
+  .m-cmpgrid { grid-template-columns: 104px repeat(var(--n), 160px) !important; min-width: 0 !important; }
   .m-chip { padding: 8px 14px !important; }
   .m-crow { padding: 11px 10px !important; }
 
@@ -546,8 +551,8 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
               <span class="m-wrap" style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;font-size:19px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">How Omar could become a {{ g.nameLower }}</span>
             </div>
           </div>
-          <button class="m-unibtn" onClick="{{ g.uniToggle }}" style="pointer-events:auto;all:unset;cursor:pointer;margin-left:auto;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700;padding:9px 16px;border-radius:999px;background:{{ g.uniBtnBg }};color:#0E8A5F;border:1.5px solid #9EE0C2;box-shadow:0 6px 18px rgba(22,18,58,.06)"><span style="width:16px;height:16px;flex:0 0 16px;background:#0E8A5F;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat"></span>{{ g.uniBtnLabel }}</button>
-          <button onClick="{{ g.save }}" style="pointer-events:auto;all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;background:{{ g.saveBg }};color:{{ g.saveColor }};box-shadow:0 6px 18px rgba(22,18,58,.08)">{{ g.saveLabel }}</button>
+          <button class="m-unibtn" onClick="{{ g.uniToggle }}" style="all:unset;pointer-events:auto;cursor:pointer;margin-left:auto;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700;padding:9px 16px;border-radius:999px;background:{{ g.uniBtnBg }};color:#0E8A5F;border:1.5px solid #9EE0C2;box-shadow:0 6px 18px rgba(22,18,58,.06)"><span style="width:16px;height:16px;flex:0 0 16px;background:#0E8A5F;-webkit-mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat;mask:url(https://unpkg.com/lucide-static@0.460.0/icons/graduation-cap.svg) center/contain no-repeat"></span>{{ g.uniBtnLabel }}</button>
+          <button onClick="{{ g.save }}" style="all:unset;pointer-events:auto;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:10px 16px;border-radius:999px;background:{{ g.saveBg }};color:{{ g.saveColor }};box-shadow:0 6px 18px rgba(22,18,58,.08)">{{ g.saveLabel }}</button>
         </div>
 
         <div class="m-plegend" style="position:absolute;left:16px;bottom:16px;max-width:calc(100% - 32px);display:flex;gap:6px 14px;flex-wrap:wrap;align-items:center;padding:8px 14px;border-radius:14px;background:#FFFFFFE6;border:1px solid #E7E3F5;font-size:11px;color:#6E6A8A;white-space:nowrap">
@@ -579,6 +584,7 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
                   <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;margin-top:2px;font-size:12px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:7px 12px;border-radius:999px">{{ u.saveLabel }}</button>
                 </div>
               </sc-for>
+              <button onClick="{{ g.uniExplore }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:13px;font-weight:700;color:#0E8A5F;padding:8px 2px">Explore all universities →</button>
               <span style="font-size:11px;color:#6E6A8A;line-height:1.45;padding:2px 2px 4px">{{ g.uniNote }}</span>
             </div>
           </div>
@@ -642,6 +648,105 @@ a{color:#5B3DF5}a:hover{color:#E8336D}
     </div>
   </sc-if>
 
+  <sc-if value="{{ isUniEx }}" hint-placeholder-val="{{ false }}">
+    <div class="m-page" style="display:flex;flex-direction:column;gap:18px;padding:28px 32px 64px;max-width:1200px;margin:0 auto;width:100%;box-sizing:border-box">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
+        <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#0E8A5F">University explorer</span>
+          <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;letter-spacing:-.03em;font-size:32px;line-height:1.1">Universities for Omar</h1>
+          <span style="font-size:14px;color:#6E6A8A;line-height:1.5">{{ x.total }} universities in the US and Qatar, matched to Omar’s profile and your budget.</span>
+        </div>
+        <div class="m-pills" style="display:flex;padding:4px;gap:4px;border-radius:999px;background:#FFFFFF;border:1px solid #E7E3F5">
+          <sc-for list="{{ x.views }}" as="o" hint-placeholder-count="2">
+            <button onClick="{{ o.go }}" style="all:unset;cursor:pointer;white-space:nowrap;padding:9px 18px;border-radius:999px;font-size:14px;font-weight:700;background:{{ o.bg }};color:{{ o.color }}">{{ o.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <sc-if value="{{ x.isExplore }}" hint-placeholder-val="{{ true }}">
+        <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase">Field</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ x.fields }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase">Where</span>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ x.regions }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.go }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.border }}">{{ c.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px 16px;flex-wrap:wrap;border-top:1px solid #F0EDF9;padding-top:14px">
+            <button onClick="{{ x.toggleBudget }}" style="all:unset;cursor:pointer;white-space:nowrap;font-size:13px;font-weight:700;padding:8px 14px;border-radius:999px;background:{{ x.budgetBg }};color:{{ x.budgetColor }};border:1px solid {{ x.budgetBorder }}">{{ x.budgetLabel }}</button>
+            <span style="font-size:13px;color:#6E6A8A">{{ x.budgetNote }}</span>
+          </div>
+        </section>
+
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap">
+          <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:18px">{{ x.countLabel }}</span>
+          <span style="font-size:13px;color:#6E6A8A">Best fit for Omar first</span>
+        </div>
+        <sc-if value="{{ x.none }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:20px;padding:28px 20px;text-align:center;font-size:14px;color:#6E6A8A">No universities match these filters. Try another field, place or budget.</div>
+        </sc-if>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px">
+          <sc-for list="{{ x.rows }}" as="u" hint-placeholder-count="6">
+            <div style="background:#FFFFFF;border:1px solid {{ u.border }};border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                <span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:{{ u.bg }};color:{{ u.fg }};white-space:nowrap">{{ u.fit }} fit</span>
+                <span style="font-size:14px;font-weight:700;white-space:nowrap">{{ u.cost }}</span>
+              </div>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.01em;font-size:18px;line-height:1.2">{{ u.name }}</span>
+              <span style="font-size:13px;color:#6E6A8A">{{ u.place }} · <span style="color:{{ u.overColor }};font-weight:600">{{ u.overText }}</span></span>
+              <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.size }}</span><span style="font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#F6F4FF;color:#4A4666;white-space:nowrap">{{ u.sel }}</span></div>
+              <span style="font-size:13px;color:#4A4666;line-height:1.45"><b style="color:#16123A">Fields:</b> {{ u.fields }}</span>
+              <span style="font-size:13px;color:#4A4666;line-height:1.45">{{ u.needs }}</span>
+              <button onClick="{{ u.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;margin-top:auto;font-size:13px;font-weight:700;color:#5B3DF5;background:{{ u.saveBg }};border:1px solid #D4CCFF;padding:8px 14px;border-radius:999px">{{ u.saveLabel }}</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ x.isCompare }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ x.cmpFew }}" hint-placeholder-val="{{ false }}">
+          <section style="background:#FFFFFF;border:1px dashed #D4CCFF;border-radius:22px;padding:32px 22px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center">
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:20px">Compare universities side by side</span>
+            <span style="font-size:14px;color:#6E6A8A;line-height:1.5;max-width:440px">{{ x.cmpHint }}</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+              <button onClick="{{ x.quickPick }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#5B3DF5;color:#FFFFFF">Shortlist the top 3 matches</button>
+              <button onClick="{{ x.goExplore }}" style="all:unset;cursor:pointer;font-size:14px;font-weight:700;padding:11px 18px;border-radius:999px;background:#FFFFFF;color:#16123A;border:1px solid #E7E3F5">Browse universities</button>
+            </div>
+          </section>
+        </sc-if>
+        <sc-if value="{{ x.canCompare }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size:13px;color:#6E6A8A">{{ x.cmpTitle }}</span>
+          <section style="background:#FFFFFF;border:1px solid #E7E3F5;border-radius:22px;overflow:hidden">
+            <div style="overflow-x:auto">
+              <div class="m-cmpgrid" style="display:grid;grid-template-columns:{{ x.cmpGrid }};min-width:{{ x.cmpMin }};--n:{{ x.cmpN }}">
+                <div style="position:sticky;left:0;z-index:1;background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:14px 16px;font-size:12px;font-weight:700;color:#6E6A8A;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:flex-end">Compare</div>
+                <sc-for list="{{ x.cmpCols }}" as="c" hint-placeholder-count="3">
+                  <div style="background:#FAF9FF;border-bottom:1px solid #E7E3F5;padding:14px 16px;display:flex;flex-direction:column;gap:4px">
+                    <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:16px;line-height:1.2">{{ c.name }}</span>
+                    <span style="font-size:12px;color:#6E6A8A">{{ c.place }}</span>
+                    <button onClick="{{ c.toggle }}" style="all:unset;cursor:pointer;align-self:flex-start;font-size:12px;font-weight:700;color:#E8336D;padding:4px 0">Remove</button>
+                  </div>
+                </sc-for>
+                <sc-for list="{{ x.cmpRows }}" as="r" hint-placeholder-count="8">
+                  <div style="position:sticky;left:0;z-index:1;background:#FFFFFF;border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:13px;font-weight:700;color:#4A4666">{{ r.label }}</div>
+                  <sc-for list="{{ r.cells }}" as="v" hint-placeholder-count="3">
+                    <div style="border-bottom:1px solid #F0EDF9;padding:12px 16px;font-size:14px;line-height:1.45;color:{{ v.color }};font-weight:{{ v.weight }}">{{ v.v }}</div>
+                  </sc-for>
+                </sc-for>
+              </div>
+            </div>
+          </section>
+        </sc-if>
+      </sc-if>
+
+      <span style="font-size:12px;color:#6E6A8A;line-height:1.5">{{ x.note }}</span>
+    </div>
+  </sc-if>
   <sc-if value="{{ isNudges }}" hint-placeholder-val="{{ false }}">
     <div class="m-page" style="padding:28px 32px 64px;display:flex;flex-direction:column;gap:22px;max-width:1320px">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap">
@@ -1865,7 +1970,7 @@ class Component extends DCLogic {
   renderVals() {
     const { lv, tab, view } = this.state;
     const ev = evaluate(lv);
-    const tabs = [['profiler','Profiler'],['unis','Career map'],['goals','Milestones'],['counsel','Talk to a counsellor'],['admin','Admin']].map(([id, label]) => { const on = tab === id; const icn = { explore: 'message-circle', profiler: 'user-round', unis: 'route', goals: 'list-checks', counsel: 'headset', admin: 'layout-dashboard' }[id]; return { label, go: () => this.setState({ tab: id }), bg: on ? '#E6E1FF' : 'transparent', color: on ? '#16123A' : '#4A4666', weight: on ? 700 : 500, ic: on ? '#5B3DF5' : '#6E6A8A', mask: LU(icn) }; });
+    const tabs = [['profiler','Profiler'],['unis','Career map'],['uniex','Universities'],['goals','Milestones'],['counsel','Talk to a counsellor'],['admin','Admin']].map(([id, label]) => { const on = tab === id; const icn = { explore: 'message-circle', profiler: 'user-round', unis: 'route', uniex: 'graduation-cap', goals: 'list-checks', counsel: 'headset', admin: 'layout-dashboard' }[id]; return { label, go: () => this.setState({ tab: id }), bg: on ? '#E6E1FF' : 'transparent', color: on ? '#16123A' : '#4A4666', weight: on ? 700 : 500, ic: on ? '#5B3DF5' : '#6E6A8A', mask: LU(icn) }; });
     const newChat = () => this.setState({ tab: 'explore' });
     const last = this.state.msgs.length - 1;
     const msgs = this.state.msgs.map((m, i) => { const chips = i === last && m.step ? this.chipsFor(m.step) : []; return { isAi: m.role === 'ai', isParent: m.role === 'parent', text: m.text, text2: m.text2, hasText2: !!m.text2, learned: (m.learned || []).map(t => ({ t: '+ ' + t })), hasLearned: !!(m.learned && m.learned.length), chips, hasChips: chips.length > 0 }; });
@@ -2272,9 +2377,42 @@ class Component extends DCLogic {
       toggle: () => this.setState(s => ({ shortlist: { ...(s.shortlist || {}), [u.name]: !(s.shortlist || {})[u.name] } })) }; });
     const nShort = Object.values(shortlist).filter(Boolean).length;
     Object.assign(graph, { uniOpen, uniRows, uniMajor: CMAJOR[selC.id][0],
-      uniToggle: () => this.setState({ uniOpen: !uniOpen, selNode: null }), uniClose: () => this.setState({ uniOpen: false }),
+      uniToggle: () => this.setState({ uniOpen: !uniOpen, selNode: null }), uniClose: () => this.setState({ uniOpen: false }), uniExplore: () => this.setState({ tab: 'uniex', uniOpen: false, xField: selC.path, xView: 'explore' }),
       uniBtnLabel: 'Universities · ' + uniRows.length, uniBtnBg: uniOpen ? '#DDF7EA' : '#FFFFFF', hasUniShort: nShort > 0, uniShort: nShort + ' shortlisted',
       uniNote: (a3.p5 == null ? 'Using a general budget and all regions until the parent assessment is done. ' : 'Using your budget and regions from the parent assessment. ') + 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance.' });
+    // University explorer: explore and compare (side menu "Universities").
+    const xf = this.state.xField || 'all', xr = this.state.xRegion || 'all', xb = !!this.state.xBudget, xv = this.state.xView || 'explore', xShort = this.state.shortlist || {};
+    const xSel = ['', 'Open admission', 'Moderately selective', 'Selective', 'Very selective', 'Most selective'], xSize = { S: 'Small campus', M: 'Medium campus', L: 'Large campus' };
+    const xLever = { project: 'an independent project', math: 'a 7 in math', lead: 'a leadership role', sat: 'an SAT score of 1450+' };
+    const xNeeds = (gap) => { if (gap >= 0) return 'Omar’s profile already matches typical students here.'; const st = WHATIFS.filter(w => w[2] >= -gap).sort((a, b) => a[2] - b[2])[0]; return st ? 'Would fit better with ' + xLever[st[0]] + '.' : 'Needs several planned steps first.'; };
+    const xToggle = (name) => () => this.setState(s => ({ shortlist: { ...(s.shortlist || {}), [name]: !(s.shortlist || {})[name] } }));
+    const xRank = { Strong: 0, Good: 1, Stretch: 2, Reach: 3 };
+    const xAll = UNIS.map(u => { const gap = BASE - (40 + u.sel * 9), fit = fitOf(gap), over = u.cost > lvU.budget, on = !!xShort[u.name];
+      return { name: u.name, place: u.city + ' · ' + (u.region === 'Qatar' ? 'Qatar' : 'US ' + u.region), cost: this.m(u.cost) + '/yr', costN: u.cost, over, overText: over ? 'Over budget' : 'Within budget', overColor: over ? '#E8336D' : '#0E8A5F',
+        fit, rank: xRank[fit], fg: FIT[fit][0], bg: FIT[fit][1], size: xSize[u.size], sel: xSel[u.sel], fields: u.paths.map(pathName).join(', '), paths: u.paths, needs: xNeeds(gap),
+        on, border: on ? '#B7A9FF' : '#E7E3F5', saveLabel: on ? '★ Shortlisted' : '☆ Shortlist', saveBg: on ? '#E6E1FF' : '#FFFFFF', toggle: xToggle(u.name) }; })
+      .sort((a, b) => (a.over - b.over) || (a.rank - b.rank) || (a.costN - b.costN));
+    const xRows = xAll.filter(u => (xf === 'all' || u.paths.includes(xf)) && (xr === 'all' || u.region === xr) && (!xb || !u.over));
+    const xChip = (on, go) => ({ bg: on ? '#16123A' : '#FFFFFF', color: on ? '#FFFFFF' : '#16123A', border: on ? '#16123A' : '#E7E3F5', go });
+    const xShortAll = xAll.filter(u => u.on), xCmp = xShortAll.slice(0, 4), xN = xCmp.length;
+    const xCell = (u, key) => ({ v: u[key], color: key === 'fit' ? u.fg : key === 'overText' ? u.overColor : '#16123A', weight: key === 'fit' || key === 'cost' ? 700 : 500 });
+    const uniX = {
+      total: UNIS.length, rows: xRows, none: xRows.length === 0, countLabel: xRows.length + (xRows.length === 1 ? ' university' : ' universities'),
+      fields: [['all', 'All fields'], ...PATHS].map(([id, label]) => ({ label, ...xChip(xf === id, () => this.setState({ xField: id })) })),
+      regions: [['all', 'Everywhere'], ...REGIONS.map(r => [r, r === 'Qatar' ? 'Qatar' : 'US · ' + r])].map(([id, label]) => ({ label, ...xChip(xr === id, () => this.setState({ xRegion: id })) })),
+      toggleBudget: () => this.setState({ xBudget: !xb }), budgetLabel: xb ? '✓ Within budget only' : 'Within budget only', budgetBg: xb ? '#DDF7EA' : '#FFFFFF', budgetColor: xb ? '#0E8A5F' : '#16123A', budgetBorder: xb ? '#9EE0C2' : '#E7E3F5',
+      budgetNote: 'Budget: up to ' + this.m(lvU.budget) + ' a year' + (a3.p5 == null ? ' (a general figure until the parent assessment is done)' : ' (from the parent assessment)'),
+      views: [['explore', 'Explore'], ['compare', 'Compare' + (xShortAll.length ? ' · ' + xShortAll.length : '')]].map(([id, label]) => ({ label, go: () => this.setState({ xView: id }), bg: xv === id ? '#16123A' : 'transparent', color: xv === id ? '#FFFFFF' : '#16123A' })),
+      isExplore: xv === 'explore', isCompare: xv === 'compare', goExplore: () => this.setState({ xView: 'explore' }),
+      cmpFew: xN < 2, canCompare: xN >= 2, cmpN: xN,
+      cmpHint: xN === 1 ? 'You have shortlisted 1 university. Shortlist one more to compare them side by side.' : 'Shortlist 2 to 4 universities in Explore, or start with Omar’s three best matches.',
+      quickPick: () => this.setState(s => { const sl = { ...(s.shortlist || {}) }; xAll.filter(u => !u.over).slice(0, 3).forEach(u => { sl[u.name] = true; }); return { shortlist: sl, xView: 'compare' }; }),
+      cmpTitle: xShortAll.length > 4 ? 'Comparing the first 4 of ' + xShortAll.length + ' shortlisted. Remove one to bring in the next.' : 'Comparing ' + xN + ' shortlisted universities.',
+      cmpGrid: '170px repeat(' + xN + ', minmax(190px, 1fr))', cmpMin: (170 + 190 * xN) + 'px',
+      cmpCols: xCmp.map(u => ({ name: u.name, place: u.place, toggle: u.toggle })),
+      cmpRows: [['Fit for Omar', 'fit'], ['Yearly cost', 'cost'], ['Budget', 'overText'], ['Location', 'place'], ['Campus', 'size'], ['Admission', 'sel'], ['Fields', 'fields'], ['What Omar needs', 'needs']].map(([label, key]) => ({ label, cells: xCmp.map(u => xCell(u, key)) })),
+      note: 'Fit compares Omar’s profile today with typical students. It is guidance, not an admission chance. Universities, costs and selectivity are sample data for this preview.'
+    };
     return {
       aViews: [['compare','Compare'],['map','Path'],['unis','Universities'],['profile','Profile'],['milestones','Milestones']].map(([id, label]) => { const on = aV === id; return { label, go: () => this.setState({ aView: id }), bg: on ? '#5B3DF5' : 'transparent', color: on ? '#FFFFFF' : '#16123A' }; }),
       avUnis: aV === 'unis', aUnis: uniEx(selC), aMajor: CMAJOR[selC.id][0], aUniNote: (a3.p5 == null ? 'Using a general budget and all regions. Add university preferences in the parent assessment to tailor this. ' : '') + 'Grade 9 is early: treat these as examples. Details on requirements and costs come from Grade 10.', avCompare: aV === 'compare', avMap: aV === 'map', avProfile: aV === 'profile', avMs: aV === 'milestones', cmpCards, cmpTitle: cmp.map(c => c.name).join(' or '), personaName: PERSONAS[baseType][0].toLowerCase(), mapSteps, gapText, aMs, aMsSub: todoN + ' to do for Omar’s saved careers' + (overN2 ? ', ' + overN2 + ' overdue' : ''),
@@ -2303,7 +2441,7 @@ class Component extends DCLogic {
       isProfiler: tab === 'profiler', pf, pfMeters, pfTraits, pfInterests, pfQuick, pfLog, pfAsk: () => { this.setState({ tab: 'explore' }); this.send('Here’s what changed for Omar this term'); },
       rmGroups: rmMode === 'area' ? rmByArea : rmGroupsS, rmModes, rmTimeline, rmIsTimeline: rmMode === 'timeline', rmIsList: rmMode !== 'timeline', rmGroupOpts, rmSummary, rmChart, rmAreas, rmNext, hasMs: !!md, md: md || {}, closeMs: () => this.setState({ selMs: null }),
       rm: { goal: gc.name, tint: PCOL[gc.path] + '22', color: PCOL[gc.path], mask: LU(CICON[gc.id]), stats: [[now, 'development now', '#16123A'], [finalProj, 'by Jan 2030', '#5B3DF5'], [target, 'target', '#E8336D']].map(([n, label, color]) => ({ n, label, color })) },
-      careerCards: progsV, g: graph, hasDrawer: !!drawer, d: drawer || {}, closeDrawer: () => this.setState({ selNode: null }), careerHeading: progsV.length + ' careers for a ' + PERSONAS[pType][0].toLowerCase(), personaTiles, pathPills, hasSavedProgs: savedM.length > 0,
+      careerCards: progsV, g: graph, x: uniX, isUniEx: tab === 'uniex', hasDrawer: !!drawer, d: drawer || {}, closeDrawer: () => this.setState({ selNode: null }), careerHeading: progsV.length + ' careers for a ' + PERSONAS[pType][0].toLowerCase(), personaTiles, pathPills, hasSavedProgs: savedM.length > 0,
       
       hero: { bgImg: pm[1] + ' url(' + AV(pm[2], pm[1]) + ') center/cover no-repeat', tint: pm[1] + '40', name: PERSONAS[pType][0], desc: PERSONAS[pType][1] + '. ' + (this.state.trial ? 'See how the matches shift below.' : 'Built from the chat' + (fromAssess ? ' and the assessment.' : '. Take the assessment to sharpen it.')), kicker: this.state.trial ? 'Trying a different persona' : 'Omar is a' },
       heroTraits: [{ label: STYLES[pStyle][0], mask: LU(SICON[pStyle]), c: '#16123A' }, { label: 'Leaning ' + pathName(lv.pathway).toLowerCase(), mask: LU(PICON[lv.pathway]), c: PCOL[lv.pathway] }],
